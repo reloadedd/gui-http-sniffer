@@ -36,8 +36,26 @@ class ColoredArgumentParser(argparse.ArgumentParser):
         if message:
             if file is None:
                 file = _sys.stderr
-            # file.write(message)
             rich_print(message, file=file)
+
+    def format_help(self):
+        formatter = self._get_formatter()
+
+        # description
+        formatter.add_text(self.description)
+
+        # positionals, optionals and user-defined groups
+        for action_group in self._action_groups:
+            formatter.start_section(f'[red]{action_group.title}[/red]')
+            formatter.add_text(action_group.description)
+            formatter.add_arguments(action_group._group_actions)
+            formatter.end_section()
+
+        # epilog
+        formatter.add_text(self.epilog)
+
+        # determine help from format above
+        return formatter.format_help()
 
     # ===============
     # Exiting methods
