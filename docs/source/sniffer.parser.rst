@@ -12,14 +12,6 @@ sniffer.parser.ColoredArgumentParser module
    :undoc-members:
    :show-inheritance:
 
-sniffer.parser.console module
------------------------------
-
-.. automodule:: sniffer.parser.console
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 sniffer.parser.textutils module
 -------------------------------
 

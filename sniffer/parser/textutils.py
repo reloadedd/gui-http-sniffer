@@ -1,7 +1,7 @@
 from .. import __version__
 import subprocess
 
-version = __version__.__version__
+version = f'[bold cyan]v{__version__.__version__}[/bold cyan]'
 commit_hash = subprocess.run(
     ['git', 'rev-parse', '--short', 'HEAD'],
     capture_output=True).stdout.decode('utf-8').strip()
