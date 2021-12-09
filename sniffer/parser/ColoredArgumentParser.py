@@ -33,6 +33,23 @@ class ColoredArgumentParser(argparse.ArgumentParser):
         self._print_message(self.format_help(), file)
 
     def _print_message(self, message, file=None):
+        """Summary line.
+
+        Extended description of function.
+
+        Parameters
+        ----------
+        arg1 : int
+            Description of arg1
+        arg2 : str
+            Description of arg2
+
+        Returns
+        -------
+        bool
+            Description of return value
+
+        """
         if message:
             if file is None:
                 file = _sys.stderr

@@ -63,3 +63,7 @@ def run():
 
     # parser.print_help()
     # parser.print_usage()
+
+
+if __name__ == '__main__':
+    run()
