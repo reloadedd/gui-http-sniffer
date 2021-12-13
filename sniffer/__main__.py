@@ -9,6 +9,8 @@ from .__version__ import __version__
 from .parser.textutils import BANNER
 from argparse import RawDescriptionHelpFormatter
 from .parser.ColoredArgumentParser import ColoredArgumentParser
+from .network.SnifferEngine import SnifferEngine
+from .utils.constants import *
 
 
 def run():
@@ -58,10 +60,15 @@ def run():
     # Mood update: feeling determined
     usage.add_argument(
         f'[u]{parser.format_usage()[7: 7 + len(parser.prog)]}[/u]'
-        f'{parser.format_usage()[7 + len(parser.prog):]}'
+        f'{parser.format_usage()[7 + len(parser.prog):]}',
+        default=PARSER_IGNORE,
+        nargs='?'   # Bypass the required value for positional arguments
     )
 
     args = parser.parse_args()
+
+    sniffer = SnifferEngine()
+    sniffer.sniff()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 import argparse
 import sys as _sys
 from rich import print as rich_print
+from ..utils.constants import *
 
 
 class ColoredArgumentParser(argparse.ArgumentParser):
@@ -31,6 +32,9 @@ class ColoredArgumentParser(argparse.ArgumentParser):
                 file = _sys.stderr
             rich_print(message, file=file)
 
+    # =======================
+    # Help-formatting methods
+    # =======================
     def format_help(self):
         """Format the help message and return it as string."""
         formatter = self._get_formatter()
@@ -50,6 +54,18 @@ class ColoredArgumentParser(argparse.ArgumentParser):
         formatter.add_text(self.epilog)
 
         # determine help from format above
+        return formatter.format_help()
+
+    def format_usage(self):
+        formatter = self._get_formatter()
+
+        # Remove the unwanted arguments from being displayed in usage
+        unwanted = [_ for _ in self._actions if _.default == PARSER_IGNORE]
+        for action in unwanted:
+            self._actions.remove(action)
+
+        formatter.add_usage(self.usage, self._actions,
+                            self._mutually_exclusive_groups)
         return formatter.format_help()
 
     # ===============

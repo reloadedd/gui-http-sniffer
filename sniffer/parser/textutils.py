@@ -10,7 +10,7 @@ commit_hash = f'[bold cyan]{commit_hash}[/bold cyan]'
 BANNER = f"""\
                      ██████╗ ██╗  ██╗███████╗
                     ██╔════╝ ██║  ██║██╔════╝   [Author: Roșca Ionuț]
-                    ██║  ███╗███████║███████╗   [License: GPL-3.0 License]
+                    ██║  ███╗███████║███████╗   [License: GPL-3.0]
                     ██║   ██║██╔══██║╚════██║   [Version: {version}]
                     ╚██████╔╝██║  ██║███████║   [Commit: {commit_hash}]
                      ╚═════╝ ╚═╝  ╚═╝╚══════╝
