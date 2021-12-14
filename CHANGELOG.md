@@ -15,7 +15,7 @@ required places.
 
 ### Changed
 - All tags will be also cryptographically signed (the commits are already) 
-with the following key: `DE7E4A0D4C55B4AC` (GPG key ID: `4AEE18F83AFDEB23`)
+with the following key: `DE7E4A0D4C55B4AC`
 
 
 ## [0.1.0] - 2021-12-14
