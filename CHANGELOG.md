@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2021-12-14
+### Added
+- Add instructions on how to build the docs, resources and information about 
+the git branching model on `README.md`
+- Add `tools/bump_version.sh` Bash script that updates the version on all 
+required places.
+
+### Changed
+- All tags will be also cryptographically signed (the commits are already) 
+with the following key: `DE7E4A0D4C55B4AC` (GPG key ID: `4AEE18F83AFDEB23`)
+
+
 ## [0.1.0] - 2021-12-14
 ### Added
 - Add this changelog
