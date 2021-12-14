@@ -1,5 +1,8 @@
 from .. import __version__
+from rich.console import Console
 import subprocess
+
+console = Console()
 
 version = f'[bold cyan]v{__version__.__version__}[/bold cyan]'
 commit_hash = subprocess.run(
@@ -16,3 +19,5 @@ BANNER = f"""\
                      ╚═════╝ ╚═╝  ╚═╝╚══════╝
                   ＧＵＩ ＨＴＴＰ ＳＮＩＦＦＥＲ
 """
+
+EPILOG = "© Copyright 2021-2022, Roșca Ionuț."

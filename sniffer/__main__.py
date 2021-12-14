@@ -6,11 +6,13 @@
 
 import argparse
 from .__version__ import __version__
-from .parser.textutils import BANNER
+from .parser.textutils import BANNER, EPILOG
 from argparse import RawDescriptionHelpFormatter
 from .parser.ColoredArgumentParser import ColoredArgumentParser
 from .network.SnifferEngine import SnifferEngine
 from .utils.constants import *
+from .utils.funcutils import handle_error
+from .parser.textutils import console
 
 
 def run():
@@ -18,7 +20,7 @@ def run():
         description=f'{BANNER}\n{__doc__}',
         formatter_class=RawDescriptionHelpFormatter,
         add_help=False,
-        epilog='Copyright © 2021-2022 Roșca Ionuț'
+        epilog=EPILOG
     )
 
     positional_args = parser.add_argument_group('POSITIONAL ARGUMENTS')
@@ -67,8 +69,12 @@ def run():
 
     args = parser.parse_args()
 
-    sniffer = SnifferEngine()
-    sniffer.sniff()
+    try:
+        sniffer = SnifferEngine()
+        sniffer.sniff()
+    except PermissionError:
+        handle_error("You need [i]root[/i] privileges in order to use raw "
+                     "sockets")
 
 
 if __name__ == '__main__':
