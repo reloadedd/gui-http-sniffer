@@ -34,5 +34,6 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.1.1...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
+[0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
