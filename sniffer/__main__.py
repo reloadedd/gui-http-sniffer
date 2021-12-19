@@ -9,10 +9,9 @@ from .__version__ import __version__
 from .parser.textutils import BANNER, EPILOG
 from argparse import RawDescriptionHelpFormatter
 from .parser.ColoredArgumentParser import ColoredArgumentParser
-from .network.SnifferEngine import SnifferEngine
-from .utils.constants import *
+from .network.engine import SnifferEngine
+from .utils.constants import PARSER_IGNORE
 from .utils.funcutils import handle_error
-from .parser.textutils import console
 
 
 def run():

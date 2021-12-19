@@ -24,6 +24,8 @@ associated branch: `release/<version>`
 - Python [struct](https://docs.python.org/3/library/struct.html) module
 - Python [socket](https://docs.python.org/3/library/socket.html) module 
 - What is the difference between recv and recvfrom? [Let's find out](https://forums.codeguru.com/showthread.php?218423-What-is-the-difference-between-recv-and-recvfrom)
+- Value for the protocol argument in `socket()` call: [htons(0x800)](https://stackoverflow.com/a/46224239)
+- Linux cooked-mode capture: [Wireshark docs](https://wiki.wireshark.org/SLL)
 
 ## Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
