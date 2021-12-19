@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2021-12-19
+### Added
+- Implement Sniffer Engine, alpha version
+- Together with the Sniffer Engine, create the Packet Analyzer
+- A new package named `exceptions` has been created that will hold all
+exceptions related to sniffer's components
+- A class has been created for each OSI layer needed (Layers: 2, 3 and 4)
+
 ## [0.1.1] - 2021-12-14
 ### Added
 - Add instructions on how to build the docs, resources and information about 
@@ -34,6 +42,9 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.2.0...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
+[0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
+[0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
+[0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
