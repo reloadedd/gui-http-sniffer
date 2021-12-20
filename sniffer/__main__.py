@@ -43,6 +43,13 @@ def run():
         action='version'
     )
     optional_args.add_argument(
+        '-i',
+        '--interface',
+        help='[blue]The network interface to be used. Default: any[/blue]',
+        default='any',
+        dest='interface'
+    )
+    optional_args.add_argument(
         '-v',
         '--version',
         action='version',
@@ -67,9 +74,10 @@ def run():
     )
 
     args = parser.parse_args()
+    print(f'Using {args.interface}')
 
     try:
-        sniffer = SnifferEngine()
+        sniffer = SnifferEngine(args.interface)
         sniffer.sniff()
     except PermissionError:
         handle_error("You need [i]root[/i] privileges in order to use raw "

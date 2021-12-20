@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Create a new class for Layer 7 of OSI Model.
 - Add banner in `README.md` file
+- Create a new exception, `UninterestingPacketException`
+- Add command-line argument for specifying the desired network interface,
+`-i/--interface`
+
+### Fixed
+- Fix Layer 4 header size being (wrongly) too broad
 
 ## [0.2.0] - 2021-12-19
 ### Added

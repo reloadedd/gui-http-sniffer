@@ -2,7 +2,7 @@ import struct
 import binascii
 import ipaddress
 from ..exceptions.network import UnsupportedVersionException, \
-    SLLUnsupportedError
+    SLLUnsupportedError, UninterestingPacketException
 
 
 class Layer2:
@@ -48,7 +48,9 @@ class Layer4:
     """Parse the layer 4 data of a packet."""
     def __init__(self, packet_bytes: bytes):
         # Ignoring 28 bytes
-        tcp_header = struct.unpack('!HH28s', packet_bytes[34:66])
+        # print(packet_bytes[34:54], len(packet_bytes[34:54]))
+        # print(f'Whole pie: {packet_bytes}')
+        tcp_header = struct.unpack('!HH16s', packet_bytes[34:54])
 
         self.source_port = tcp_header[0]
         self.dest_port = tcp_header[1]
@@ -57,4 +59,4 @@ class Layer4:
 class Layer7:
     """Parse the layer 7 data of a packet (that's the actual data)."""
     def __init__(self, packet_bytes: bytes):
-        self.data = packet_bytes[66:]
+        self.data = packet_bytes[54:]

@@ -1,8 +1,12 @@
 from .layers import Layer2, Layer3, Layer4, Layer7
+from ..exceptions.network import UninterestingPacketException
 
 
 class PacketAnalyzer:
     def __init__(self, packet_bytes: bytes):
+        if b'HTTP/' not in packet_bytes:
+            raise UninterestingPacketException
+
         self.layer2 = Layer2(packet_bytes)
         self.layer3 = Layer3(packet_bytes)
         self.layer4 = Layer4(packet_bytes)
