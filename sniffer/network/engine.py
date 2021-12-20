@@ -24,5 +24,6 @@ class SnifferEngine:
                 print(analyzer.get_dest_ip())
                 print(analyzer.get_source_port())
                 print(analyzer.get_dest_port())
+                print(analyzer.get_content())
             except SLLUnsupportedError:
                 continue

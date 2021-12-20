@@ -1,4 +1,4 @@
-from .layers import Layer2, Layer3, Layer4
+from .layers import Layer2, Layer3, Layer4, Layer7
 
 
 class PacketAnalyzer:
@@ -6,6 +6,7 @@ class PacketAnalyzer:
         self.layer2 = Layer2(packet_bytes)
         self.layer3 = Layer3(packet_bytes)
         self.layer4 = Layer4(packet_bytes)
+        self.layer7 = Layer7(packet_bytes)
 
     def get_source_mac(self):
         return self.layer2.source_mac.decode('ascii')
@@ -30,3 +31,6 @@ class PacketAnalyzer:
 
     def get_dest_port(self):
         return self.layer4.dest_port
+
+    def get_content(self):
+        return self.layer7.data

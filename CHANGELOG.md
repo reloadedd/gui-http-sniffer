@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Create a new class for Layer 7 of OSI Model.
+- Add banner in `README.md` file
 
 ## [0.2.0] - 2021-12-19
 ### Added

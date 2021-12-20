@@ -6,6 +6,7 @@ from ..exceptions.network import UnsupportedVersionException, \
 
 
 class Layer2:
+    """Parse the layer 2 data of a packet."""
     NULL_MAC_ADDRESS = b'00:00:00:00:00:00'
 
     """Parse the layer 2 data of a packet."""
@@ -25,6 +26,7 @@ class Layer2:
 
 
 class Layer3:
+    """Parse the layer 3 data of a packet."""
     IP_VERSION_4 = 0x45
 
     """Parse the layer 4 data of a packet."""
@@ -50,3 +52,9 @@ class Layer4:
 
         self.source_port = tcp_header[0]
         self.dest_port = tcp_header[1]
+
+
+class Layer7:
+    """Parse the layer 7 data of a packet (that's the actual data)."""
+    def __init__(self, packet_bytes: bytes):
+        self.data = packet_bytes[66:]
