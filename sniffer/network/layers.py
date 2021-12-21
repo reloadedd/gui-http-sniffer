@@ -47,9 +47,7 @@ class Layer3:
 class Layer4:
     """Parse the layer 4 data of a packet."""
     def __init__(self, packet_bytes: bytes):
-        # Ignoring 28 bytes
-        # print(packet_bytes[34:54], len(packet_bytes[34:54]))
-        # print(f'Whole pie: {packet_bytes}')
+        # Ignoring 16 bytes
         tcp_header = struct.unpack('!HH16s', packet_bytes[34:54])
 
         self.source_port = tcp_header[0]

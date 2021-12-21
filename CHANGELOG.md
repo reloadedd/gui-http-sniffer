@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create a new exception, `UninterestingPacketException`
 - Add command-line argument for specifying the desired network interface,
 `-i/--interface`
+- Create `decorators.py` file inside `utils` package that will contain, you've
+guessed it: decorators. Also, created the first decorator, `require_root` that
+will exit if the user running the script isn't **root**
 
 ### Fixed
 - Fix Layer 4 header size being (wrongly) too broad

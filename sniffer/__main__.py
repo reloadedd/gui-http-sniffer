@@ -5,16 +5,16 @@
 """
 
 import argparse
-from .__version__ import __version__
-from .parser.textutils import BANNER, EPILOG
 from argparse import RawDescriptionHelpFormatter
-from .parser.ColoredArgumentParser import ColoredArgumentParser
+from .__version__ import __version__
 from .network.engine import SnifferEngine
+from .utils.decorators import require_root
 from .utils.constants import PARSER_IGNORE
-from .utils.funcutils import handle_error
+from .parser.textutils import BANNER, EPILOG
+from .parser.ColoredArgumentParser import ColoredArgumentParser
 
 
-def run():
+def create_parser():
     parser = ColoredArgumentParser(
         description=f'{BANNER}\n{__doc__}',
         formatter_class=RawDescriptionHelpFormatter,
@@ -64,8 +64,9 @@ def run():
         help='[blue]Show this help message and exit.[/blue]'
     )
 
-    usage = parser.add_argument_group('USAGE')
     # Mood update: feeling determined
+    # This is what I call 'o românească'
+    usage = parser.add_argument_group('USAGE')
     usage.add_argument(
         f'[u]{parser.format_usage()[7: 7 + len(parser.prog)]}[/u]'
         f'{parser.format_usage()[7 + len(parser.prog):]}',
@@ -73,16 +74,22 @@ def run():
         nargs='?'   # Bypass the required value for positional arguments
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+@require_root
+def sniff(interface):
+    sniffer = SnifferEngine(interface)
+    sniffer.sniff()
+
+
+def main():
+    args = create_parser()
     print(f'Using {args.interface}')
 
-    try:
-        sniffer = SnifferEngine(args.interface)
-        sniffer.sniff()
-    except PermissionError:
-        handle_error("You need [i]root[/i] privileges in order to use raw "
-                     "sockets")
+    sniff(args.interface)
 
 
-if __name__ == '__main__':
-    run()
+# Don't worry, this won't be called whenever you import the package in your
+# script, only when run through a zip file or by using python -m ...
+main()
