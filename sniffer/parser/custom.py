@@ -14,7 +14,7 @@ class ColoredArgumentParser(argparse.ArgumentParser):
     # =====================
     # Help-printing methods
     # =====================
-    def print_usage(self, file: typing.TextIO = None):
+    def print_usage(self, file: typing.TextIO = None) -> None:
         """Print the usage message for the script.
 
         Parameters
@@ -26,7 +26,7 @@ class ColoredArgumentParser(argparse.ArgumentParser):
             file = _sys.stdout
         self._print_message(self.format_usage(), file)
 
-    def print_help(self, file: typing.TextIO = None):
+    def print_help(self, file: typing.TextIO = None) -> None:
         """Print the help message, describing the available options.
 
         Parameters
@@ -38,7 +38,7 @@ class ColoredArgumentParser(argparse.ArgumentParser):
             file = _sys.stdout
         self._print_message(self.format_help(), file)
 
-    def _print_message(self, message: str, file: typing.TextIO = None):
+    def _print_message(self, message: str, file: typing.TextIO = None) -> None:
         """Display the given message using syntax enhancing.
 
         Parameters
@@ -56,7 +56,7 @@ class ColoredArgumentParser(argparse.ArgumentParser):
     # =======================
     # Help-formatting methods
     # =======================
-    def format_help(self):
+    def format_help(self) -> str:
         """Format the help message and return it as string."""
         formatter = self._get_formatter()
 
@@ -77,7 +77,7 @@ class ColoredArgumentParser(argparse.ArgumentParser):
         # determine help from format above
         return formatter.format_help()
 
-    def format_usage(self):
+    def format_usage(self) -> str:
         """Format the usage message and return it as string."""
         formatter = self._get_formatter()
 
@@ -93,7 +93,7 @@ class ColoredArgumentParser(argparse.ArgumentParser):
     # ===============
     # Exiting methods
     # ===============
-    def exit(self, status: int = 0, message: str = None):
+    def exit(self, status: int = 0, message: str = None) -> None:
         """Exit with `status`, optionally displaying an error message.
 
         Parameters
