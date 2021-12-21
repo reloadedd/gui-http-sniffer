@@ -4,29 +4,31 @@
     that traffic.
 """
 
+import sys
 import argparse
 from .__version__ import __version__
-from .parser.textutils import BANNER, EPILOG
-from argparse import RawDescriptionHelpFormatter
-from .parser.ColoredArgumentParser import ColoredArgumentParser
 from .network.engine import SnifferEngine
+from .utils.constants import EXIT_SUCCESS
+from .utils.decorators import require_root
 from .utils.constants import PARSER_IGNORE
-from .utils.funcutils import handle_error
+from .parser.options import list_interfaces
+from .parser.textutils import BANNER, EPILOG
+from .parser.custom import ColoredArgumentParser
 
 
-def run():
+def create_parser():
     parser = ColoredArgumentParser(
+        prog='sniffer' if sys.argv[0] == '-m' else sys.argv[0],
         description=f'{BANNER}\n{__doc__}',
-        formatter_class=RawDescriptionHelpFormatter,
+        formatter_class=lambda prog: argparse.RawDescriptionHelpFormatter(
+            prog,
+            max_help_position=40
+        ),
         add_help=False,
         epilog=EPILOG
     )
 
     positional_args = parser.add_argument_group('POSITIONAL ARGUMENTS')
-    positional_args.add_argument(
-        'a',
-        help='[blue]a first argument[/blue]'
-    )
 
     optional_args = parser.add_argument_group('OPTIONAL ARGUMENTS')
     optional_args.add_argument(
@@ -37,10 +39,18 @@ def run():
              '[/blue]'
     )
     optional_args.add_argument(
-        '-n',
-        '--no-color',
-        help='[blue]Disable output coloring.[/blue]',
-        action='version'
+        '-i',
+        '--interface',
+        help='[blue]The network interface to be used. Default: any[/blue]',
+        default='any',
+        dest='interface'
+    )
+    optional_args.add_argument(
+        '-l',
+        '--list-interfaces',
+        help='[blue]List all network interfaces present in the system[/blue]',
+        dest='list_interfaces',
+        action='store_true'
     )
     optional_args.add_argument(
         '-v',
@@ -57,8 +67,9 @@ def run():
         help='[blue]Show this help message and exit.[/blue]'
     )
 
-    usage = parser.add_argument_group('USAGE')
     # Mood update: feeling determined
+    # This is what I call 'o românească'
+    usage = parser.add_argument_group('USAGE')
     usage.add_argument(
         f'[u]{parser.format_usage()[7: 7 + len(parser.prog)]}[/u]'
         f'{parser.format_usage()[7 + len(parser.prog):]}',
@@ -66,15 +77,36 @@ def run():
         nargs='?'   # Bypass the required value for positional arguments
     )
 
-    args = parser.parse_args()
+    # By parsing all the arguments until here, we are able to bypass the need
+    # to fill the positional arguments
+    parsed, _ = parser.parse_known_args()
 
-    try:
-        sniffer = SnifferEngine()
-        sniffer.sniff()
-    except PermissionError:
-        handle_error("You need [i]root[/i] privileges in order to use raw "
-                     "sockets")
+    if parsed.list_interfaces:
+        list_interfaces()
+        exit(EXIT_SUCCESS)
+
+    # This will be parsed after checking all optional arguments
+    positional_args.add_argument(
+        'a',
+        help='[blue]a first argument[/blue]'
+    )
+
+    return parser.parse_args()
 
 
-if __name__ == '__main__':
-    run()
+@require_root
+def sniff(interface):
+    sniffer = SnifferEngine(interface)
+    sniffer.sniff()
+
+
+def main():
+    args = create_parser()
+
+    print(f'Using {args.interface}')
+    sniff(args.interface)
+
+
+# Don't worry, this won't be called whenever you import the package in your
+# script, only when run through a zip file or by using python -m ...
+main()

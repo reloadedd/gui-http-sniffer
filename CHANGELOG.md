@@ -6,6 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2021-12-22
+### Added
+- Create a new class for Layer 7 of OSI Model.
+- Add banner in `README.md` file
+- Create a new exception, `UninterestingPacketException`
+- Add command-line argument for specifying the desired network interface,
+`-i/--interface`
+- Create `decorators.py` file inside `utils` package that will contain, you've
+guessed it: decorators. Also, created the first decorator, `require_root` that
+will exit if the user running the script isn't **root**
+- Implement `-l/--list-interfaces` option, which will list all interfaces
+present in the system together with their MAC address + IPv4/6 address
+
+### Changed
+- Update Sniffer's description in `README.md` file
+
+### Fixed
+- Fix Layer 4 header size being (wrongly) too broad
+
 ## [0.2.0] - 2021-12-19
 ### Added
 - Implement Sniffer Engine, alpha version
@@ -42,9 +61,10 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.3.0...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
+[0.3.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.0

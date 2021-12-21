@@ -1,5 +1,35 @@
 # GUI HTTP Sniffer
-HTTP Packet Sniffer which can be accessed using a GUI
+
+```
+
+                 *     .--.
+                      / /  `
+     +               | |
+            '         \ \__,
+        *          +   '--'  *
+          +   /\
++           .'  '.  *    ███████╗        ██╗  ██╗            ███████╗
+    *      /======\  +   ██╔════╝        ██║  ██║            ██╔════╝
+          ;:.  _   ;     ██║  ███╗       ███████║            ███████╗
+          |:. (_)  |     ██║   ██║       ██╔══██║___ ___  __ ╚════██║        ___  ___  ___  __ 
+          |:.  _   |     ╚██████╔╝|  | | ██║  ██║ |   |  |__)███████║|\ | | |__  |__  |__  |__)
+  +       |:. (_)  |   *  ╚═════╝ \__/ | ╚═╝  ╚═╝ |   |  |   ╚══════╝| \| | |    |    |___ |  \
+          ;:.      ;                         🌠 𝖇𝖞 𝕽𝖔𝖘𝖈𝖆 𝕴𝖔𝖓𝖚𝖙
+        .' \:.    / `.
+       / .-'':._.'`-. \
+       |/    /||\    \|
+    jgs _..--"""````"""--.._
+  _.-'``                    ``'-._
+-'                                '-
+
+```
+
+HTTP Packet Sniffer which can be accessed using a ~~GUI~~ (more like **TUI**).
+_GUI HTTP Sniffer_ i.e. **GHS**, is a layer-7 sniffer (it can also sniff lower 
+layers, starting with layer 3), targeting unencrypted HTTP traffic 
+(it can also be extended to sniff a myriad of other protocols, but we are 
+mainly interested in HTTP) and is capable of reading and analyzing that 
+traffic.    
 
 ## Building Documentation
 Go to `docs/` directory and run `make html`. A new directory called `build/`
