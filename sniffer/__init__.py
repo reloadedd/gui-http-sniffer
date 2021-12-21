@@ -1,3 +1,4 @@
 from . import __main__
 
-run = __main__.run
+# Make the main function available globally to whoever imports the package
+main = __main__.main
