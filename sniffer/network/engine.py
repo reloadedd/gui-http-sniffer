@@ -1,5 +1,6 @@
 import socket
 import struct
+import netifaces
 from pwn import hexdump
 from ..utils.constants import ETH_P_IP
 from .analyzer import PacketAnalyzer
@@ -17,10 +18,13 @@ class SnifferEngine:
                                     socket.IPPROTO_TCP)
                                     # socket.htons(ETH_P_IP))
 
-        # if self.interface != SnifferEngine.NET_INTERFACE_ANY:
+        if self.interface != SnifferEngine.NET_INTERFACE_ANY:
             # Attach to network interface
-        # self.socket.bind((self.interface, 0))
-        self.socket.bind(('10.0.3.15', 0))
+            self.socket.bind((
+                netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr'],
+                0
+            ))
+    
         # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
     def sniff(self):
