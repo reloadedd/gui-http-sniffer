@@ -16,7 +16,6 @@ class SnifferEngine:
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_RAW,
                                     socket.IPPROTO_TCP)
-                                    # socket.htons(ETH_P_IP))
 
         if self.interface != SnifferEngine.NET_INTERFACE_ANY:
             # Attach to network interface

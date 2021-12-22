@@ -47,7 +47,6 @@ What's important to know:
 associated branch: `release/<version>`
 - What's in `master` is "production-ready"
 
-
 ## Resources
 - RFC 791 - [IP Header Format](https://datatracker.ietf.org/doc/html/rfc791#section-3.1)
 - RFC 793 - [TCP Header Format](https://datatracker.ietf.org/doc/html/rfc793#section-3.1)
@@ -56,6 +55,7 @@ associated branch: `release/<version>`
 - What is the difference between recv and recvfrom? [Let's find out](https://forums.codeguru.com/showthread.php?218423-What-is-the-difference-between-recv-and-recvfrom)
 - Value for the protocol argument in `socket()` call: [htons(0x800)](https://stackoverflow.com/a/46224239)
 - Linux cooked-mode capture: [Wireshark docs](https://wiki.wireshark.org/SLL)
+- Socket options list: [Shichao's Notes](https://notes.shichao.io/unp/ch7/)
 
 ## Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

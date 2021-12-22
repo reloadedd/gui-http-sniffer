@@ -14,6 +14,7 @@ def require_root(func: Callable[..., None]) -> Callable[..., None]:
     Parameters
     ----------
     func : Callable[..., None]
+        The function to be called
 
     Returns
     -------

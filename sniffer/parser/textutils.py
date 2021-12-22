@@ -1,14 +1,12 @@
 from .. import __version__
+from ..utils.funcutils import get_commit_hash
 from rich.console import Console
-import subprocess
 
+# Global object which will be used throughout the whole package
 console = Console()
 
 version = f'[bold cyan]v{__version__.__version__}[/bold cyan]'
-commit_hash = subprocess.run(
-    ['git', 'rev-parse', '--short', 'HEAD'],
-    capture_output=True).stdout.decode('utf-8').strip()
-commit_hash = f'[bold cyan]{commit_hash}[/bold cyan]'
+commit_hash = f'[bold cyan]{get_commit_hash()}[/bold cyan]'
 
 BANNER = f"""\
                      ██████╗ ██╗  ██╗███████╗
