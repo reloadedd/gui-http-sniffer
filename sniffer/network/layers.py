@@ -9,7 +9,6 @@ class Layer2:
     """Parse the layer 2 data of a packet."""
     NULL_MAC_ADDRESS = b'00:00:00:00:00:00'
 
-    """Parse the layer 2 data of a packet."""
     def __init__(self, packet_bytes: bytes):
         ethernet_header = struct.unpack('!6s6s2s', packet_bytes[:14])
 
@@ -29,7 +28,6 @@ class Layer3:
     """Parse the layer 3 data of a packet."""
     IP_VERSION_4 = 0x45
 
-    """Parse the layer 4 data of a packet."""
     def __init__(self, packet_bytes: bytes):
         # Ignoring 11 bytes
         ip_header = struct.unpack('!B11s4s4s', packet_bytes[14:34])

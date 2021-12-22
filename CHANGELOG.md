@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2021-12-22
+### Added
+- Create the Text User Interface (TUI) containing multiple columns, each one
+with its own unique purpose
+- Create the intro animation (in case you're wondering, it's from Watch Dogs)
+
+### Fixed
+- Fix docstrings and Sphinx files (those `.rst` files)
+
 ## [0.3.0] - 2021-12-22
 ### Added
 - Create a new class for Layer 7 of OSI Model.
@@ -61,10 +70,11 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.3.1...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
 [0.3.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.0
+[0.3.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.1

@@ -4,10 +4,18 @@ sniffer.parser package
 Submodules
 ----------
 
-sniffer.parser.ColoredArgumentParser module
--------------------------------------------
+sniffer.parser.custom module
+----------------------------
 
-.. automodule:: sniffer.parser.ColoredArgumentParser
+.. automodule:: sniffer.parser.custom
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+sniffer.parser.options module
+-----------------------------
+
+.. automodule:: sniffer.parser.options
    :members:
    :undoc-members:
    :show-inheritance:
