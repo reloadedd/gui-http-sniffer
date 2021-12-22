@@ -14,6 +14,7 @@ from .utils.constants import PARSER_IGNORE
 from .parser.options import list_interfaces
 from .parser.textutils import BANNER, EPILOG
 from .parser.custom import ColoredArgumentParser
+from .tui.display import render
 
 
 def create_parser():
@@ -103,10 +104,9 @@ def sniff(interface):
 def main():
     args = create_parser()
 
-    print(f'Using {args.interface}')
-    sniff(args.interface)
+    # sniff(args.interface)
+    render(args)
 
 
-# Don't worry, this won't be called whenever you import the package in your
-# script, only when run through a zip file or by using python -m ...
-main()
+if __name__ == '__main__':
+    main()
