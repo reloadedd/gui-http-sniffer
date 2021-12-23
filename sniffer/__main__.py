@@ -5,6 +5,7 @@
 """
 
 import sys
+import asyncio
 import argparse
 from .__version__ import __version__
 from .network.engine import SnifferEngine
@@ -98,14 +99,19 @@ def create_parser():
 @require_root
 def sniff(interface):
     sniffer = SnifferEngine(interface)
-    sniffer.sniff()
+    # print(sniffer.total_packet_count)
+    sniffer.sniff(3)
+
+
+async def run():
+    args = create_parser()
+
+    sniff(args.interface)
+    # render(args)
 
 
 def main():
-    args = create_parser()
-
-    # sniff(args.interface)
-    render(args)
+    asyncio.run(run())
 
 
 if __name__ == '__main__':

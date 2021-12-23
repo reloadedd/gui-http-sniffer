@@ -10,9 +10,13 @@ from ..exceptions.network import SLLUnsupportedError,\
 
 class SnifferEngine:
     NET_INTERFACE_ANY = 'any'
+    INFINITY = -1
 
     def __init__(self, interface: str):
         self.interface = interface
+        self.total_packet_count = 0
+        self.http_packet_count = 0
+
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_RAW,
                                     socket.IPPROTO_TCP)
@@ -23,12 +27,30 @@ class SnifferEngine:
                 netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr'],
                 0
             ))
-    
+
         # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
-    def sniff(self):
-        while True:
+    @property
+    def total_packet_count(self):
+        return self._packet_count
+
+    @total_packet_count.setter
+    def total_packet_count(self, value):
+        self._packet_count = value
+
+    @property
+    def http_packet_count(self):
+        return self._http_packet_count
+
+    @http_packet_count.setter
+    def http_packet_count(self, value):
+        self._http_packet_count = value
+
+    def sniff(self, count: int = -1):
+        while count == SnifferEngine.INFINITY or self.http_packet_count <= count:
+            print(self.total_packet_count, self.http_packet_count)
             packet = self.socket.recvfrom(65535)[0]
+            self.total_packet_count += 1
 
             try:
                 print(hexdump(packet), len(packet), b'HTTP/' in packet)
@@ -44,7 +66,7 @@ class SnifferEngine:
                 continue
             except UnsupportedVersionException:
                 continue
-            # except struct.error:
-            #     continue
             except UninterestingPacketException:
                 continue
+
+            self.http_packet_count += 1
