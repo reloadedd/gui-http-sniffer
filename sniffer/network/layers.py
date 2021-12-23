@@ -1,27 +1,7 @@
 import struct
-import binascii
 import ipaddress
 from ..exceptions.network import UnsupportedVersionException, \
-    SLLUnsupportedError, UninterestingPacketException
-
-
-class Layer2:
-    """Parse the layer 2 data of a packet."""
-    NULL_MAC_ADDRESS = b'00:00:00:00:00:00'
-
-    def __init__(self, packet_bytes: bytes):
-        ethernet_header = struct.unpack('!6s6s2s', packet_bytes[:14])
-
-        self.source_mac = Layer2.parse_mac_address(ethernet_header[0])
-        if self.source_mac == Layer2.NULL_MAC_ADDRESS:
-            raise SLLUnsupportedError
-
-        self.dest_mac = Layer2.parse_mac_address(ethernet_header[1])
-        self.type = ethernet_header[2]
-
-    @staticmethod
-    def parse_mac_address(address: bytes):
-        return binascii.hexlify(address, sep=':')
+    UninterestingPacketException
 
 
 class Layer3:

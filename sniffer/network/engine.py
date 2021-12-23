@@ -4,8 +4,8 @@ import netifaces
 from pwn import hexdump
 from ..utils.constants import ETH_P_IP
 from .analyzer import PacketAnalyzer
-from ..exceptions.network import SLLUnsupportedError,\
-    UninterestingPacketException, UnsupportedVersionException
+from ..exceptions.network import UninterestingPacketException,\
+    UnsupportedVersionException
 
 
 class SnifferEngine:
@@ -62,8 +62,6 @@ class SnifferEngine:
                 print(analyzer.get_source_port())
                 print(analyzer.get_dest_port())
                 print(analyzer.get_content())
-            except SLLUnsupportedError:
-                continue
             except UnsupportedVersionException:
                 continue
             except UninterestingPacketException:

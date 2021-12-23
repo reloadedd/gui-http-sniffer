@@ -1,4 +1,4 @@
-from .layers import Layer2, Layer3, Layer4, Layer7
+from .layers import Layer3, Layer4, Layer7
 from ..exceptions.network import UninterestingPacketException
 
 
@@ -7,19 +7,9 @@ class PacketAnalyzer:
         if b'HTTP/' not in packet_bytes:
             raise UninterestingPacketException
 
-        self.layer2 = Layer2(packet_bytes)
         self.layer3 = Layer3(packet_bytes)
         self.layer4 = Layer4(packet_bytes)
         self.layer7 = Layer7(packet_bytes)
-
-    def get_source_mac(self):
-        return self.layer2.source_mac.decode('ascii')
-
-    def get_dest_mac(self):
-        return self.layer2.dest_mac.decode('ascii')
-
-    def get_type(self):
-        return self.layer2.type
 
     def get_ip_version(self):
         return self.layer3.version
