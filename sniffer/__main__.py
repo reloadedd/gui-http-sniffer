@@ -96,20 +96,20 @@ def create_parser():
     return parser.parse_args()
 
 
-@require_root
-def sniff(interface):
+async def sniff(interface):
     sniffer = SnifferEngine(interface)
     # print(sniffer.total_packet_count)
-    sniffer.sniff(3)
+    await sniffer.sniff(300)
 
 
 async def run():
     args = create_parser()
 
-    sniff(args.interface)
-    # render(args)
+    # await sniff(args.interface)
+    render(args)
 
 
+@require_root
 def main():
     asyncio.run(run())
 

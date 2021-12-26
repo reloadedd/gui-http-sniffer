@@ -1,8 +1,6 @@
 import socket
-import struct
-import netifaces
 from pwn import hexdump
-from ..utils.constants import ETH_P_IP
+from ..utils.constants import ETH_P_ALL
 from .analyzer import PacketAnalyzer
 from ..exceptions.network import UninterestingPacketException,\
     UnsupportedVersionException
@@ -11,22 +9,23 @@ from ..exceptions.network import UninterestingPacketException,\
 class SnifferEngine:
     NET_INTERFACE_ANY = 'any'
     INFINITY = -1
+    MAX_PACKET_LEN = 65535
 
     def __init__(self, interface: str):
         self.interface = interface
         self.total_packet_count = 0
         self.http_packet_count = 0
 
-        self.socket = socket.socket(socket.AF_INET,
+        self.socket = socket.socket(socket.AF_PACKET,
                                     socket.SOCK_RAW,
-                                    socket.IPPROTO_TCP)
+                                    socket.ntohs(ETH_P_ALL))
+
+        # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+        # self.socket.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
 
         if self.interface != SnifferEngine.NET_INTERFACE_ANY:
             # Attach to network interface
-            self.socket.bind((
-                netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr'],
-                0
-            ))
+            self.socket.bind((self.interface, 0))
 
         # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
@@ -46,17 +45,20 @@ class SnifferEngine:
     def http_packet_count(self, value):
         self._http_packet_count = value
 
-    def sniff(self, count: int = -1):
-        while count == SnifferEngine.INFINITY or self.http_packet_count <= count:
-            print(self.total_packet_count, self.http_packet_count)
+    async def __sniff(self):
+        while True:
+            yield self.socket.recvfrom(SnifferEngine.MAX_PACKET_LEN)[0]
+
+    async def sniff(self, count: int = -1):
+        # while count == SnifferEngine.INFINITY or self.http_packet_count <= count:
+        async for i in self.__sniff():
+            # print(self.total_packet_count, self.http_packet_count)
             packet = self.socket.recvfrom(65535)[0]
             self.total_packet_count += 1
 
+            print(hexdump(packet), len(packet), b'HTTP/' in packet)
             try:
-                print(hexdump(packet), len(packet), b'HTTP/' in packet)
                 analyzer = PacketAnalyzer(packet)
-                print(analyzer.get_source_mac())
-                print(analyzer.get_dest_mac())
                 print(analyzer.get_source_ip())
                 print(analyzer.get_dest_ip())
                 print(analyzer.get_source_port())

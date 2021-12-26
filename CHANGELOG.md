@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Counters for total packets and HTTP packets inside the Sniffer Engine
+- Make the `run` function async (main is just the caller of the `run` function,
+kind of like a wrapper). This marks the beginning of the performance 
+improvements that the Sniffer will receive.
+
+### Removed
+- Remove Layer 2 class because we are no longer sniffing the data link layer 
+(remember, we are here only for HTTP)
+
+
 ## [0.3.1] - 2021-12-22
 ### Added
 - Create the Text User Interface (TUI) containing multiple columns, each one
