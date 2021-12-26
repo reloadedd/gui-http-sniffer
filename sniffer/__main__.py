@@ -10,7 +10,6 @@ import argparse
 from .__version__ import __version__
 from .network.engine import SnifferEngine
 from .utils.constants import EXIT_SUCCESS
-from .utils.decorators import require_root
 from .utils.constants import PARSER_IGNORE
 from .parser.options import list_interfaces
 from .parser.textutils import BANNER, EPILOG
@@ -96,20 +95,14 @@ def create_parser():
     return parser.parse_args()
 
 
-async def sniff(interface):
-    sniffer = SnifferEngine(interface)
-    # print(sniffer.total_packet_count)
-    await sniffer.sniff(300)
-
-
 async def run():
     args = create_parser()
 
+    sniffer = SnifferEngine(args.interface)
     # await sniff(args.interface)
-    render(args)
+    await render(args, sniffer)
 
 
-@require_root
 def main():
     asyncio.run(run())
 

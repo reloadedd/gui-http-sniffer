@@ -9,6 +9,7 @@ from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
 from ..parser.textutils import console
+from ..network.engine import SnifferEngine
 from ..utils.funcutils import get_commit_hash
 from ..__version__ import __version__
 
@@ -49,6 +50,23 @@ class Footer:
                      style="cyan")
 
 
+class SidePanel:
+    def __init__(self, sniffer):
+        self.sniffer = sniffer
+
+    def __rich__(self):
+        text = f"""\
+▶ Total Packet Count\t[b yellow]{self.sniffer.total_packet_count}[/b yellow]
+▶ HTTP Packet Count\t[b yellow]{self.sniffer.http_packet_count}[/b yellow]
+"""
+
+        return Panel(text,
+                     title="[red]Statistics[/red]",
+                     title_align="center",
+                     border_style='bold red',
+                     style="cyan")
+
+
 class Banner:
     """Display an animated ASCII Art text.
 
@@ -77,7 +95,7 @@ class Banner:
             Align.center(
                 Text(self.banner_array[self.index].replace('\\n', '\n'),
                      justify='left', style='bold red'), vertical='middle'),
-            border_style='dim dark_cyan'
+            border_style='bold dark_cyan'
         )
         self.index += 1
 
@@ -99,30 +117,37 @@ def intro(banner: Banner, live: Live) -> None:
         sleep(0.048)
 
 
-def render(args: argparse.Namespace):
+def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     layout = Layout()
-    panel = Panel(layout, border_style='dim dark_cyan')
+    panel = Panel(layout, border_style='bold dark_cyan')
 
     layout.split(
-        Layout(name="header", size=1),
-        Layout(ratio=1, name="main"),
-        Layout(size=3, name="footer"),
+        Layout(name='header', size=1),
+        Layout(ratio=1, name='main'),
+        Layout(size=3, name='footer'),
     )
 
-    layout["main"].split_row(Layout(name="body", ratio=3), Layout(name="side"))
-    layout["body"].update(
+    layout['main'].split_row(Layout(name='body', ratio=3), Layout(name='side'))
+    layout['body'].update(
         Align.left(
             Text(
                 """This is a demonstration of rich.Layout\n\n
 Hit Ctrl+C to exit""",
-                justify="center",
+                justify='center',
             ),
             # vertical="middle",
         )
     )
 
-    layout["header"].update(Header())
-    layout["footer"].update(Footer(args.interface))
+    layout['header'].update(Header())
+    layout['side'].update(SidePanel(sniffer))
+    layout['footer'].update(Footer(args.interface))
+
+    return layout, panel
+
+
+async def render(args: argparse.Namespace, sniffer: SnifferEngine):
+    layout, panel = make_layouts(args, sniffer)
 
     banner = Banner()
     with Live(banner, screen=True, redirect_stderr=False) as live:
@@ -132,6 +157,6 @@ Hit Ctrl+C to exit""",
         live.update(panel)
         try:
             while True:
-                sleep(1)
+                await sniffer.sniff(300)
         except KeyboardInterrupt:
             pass

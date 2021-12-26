@@ -2,6 +2,7 @@ import socket
 from pwn import hexdump
 from ..utils.constants import ETH_P_ALL
 from .analyzer import PacketAnalyzer
+from ..utils.decorators import require_root
 from ..exceptions.network import UninterestingPacketException,\
     UnsupportedVersionException
 
@@ -11,6 +12,7 @@ class SnifferEngine:
     INFINITY = -1
     MAX_PACKET_LEN = 65535
 
+    @require_root
     def __init__(self, interface: str):
         self.interface = interface
         self.total_packet_count = 0
@@ -50,10 +52,9 @@ class SnifferEngine:
             yield self.socket.recvfrom(SnifferEngine.MAX_PACKET_LEN)[0]
 
     async def sniff(self, count: int = -1):
-        # while count == SnifferEngine.INFINITY or self.http_packet_count <= count:
-        async for i in self.__sniff():
+        async for packet in self.__sniff():
             # print(self.total_packet_count, self.http_packet_count)
-            packet = self.socket.recvfrom(65535)[0]
+            # packet = self.socket.recvfrom(SnifferEngine.MAX_PACKET_LEN)[0]
             self.total_packet_count += 1
 
             print(hexdump(packet), len(packet), b'HTTP/' in packet)
