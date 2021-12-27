@@ -3,11 +3,6 @@ class UnsupportedVersionException(Exception):
     pass
 
 
-class SLLUnsupportedError(Exception):
-    """SLL is not supported."""
-    pass
-
-
 class UninterestingPacketException(Exception):
-    """We only care about HTTP packets, not other things."""
+    """We only care about HTTP packets, not other types of packets."""
     pass

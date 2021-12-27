@@ -5,11 +5,11 @@
 """
 
 import sys
+import asyncio
 import argparse
 from .__version__ import __version__
 from .network.engine import SnifferEngine
 from .utils.constants import EXIT_SUCCESS
-from .utils.decorators import require_root
 from .utils.constants import PARSER_IGNORE
 from .parser.options import list_interfaces
 from .parser.textutils import BANNER, EPILOG
@@ -60,13 +60,6 @@ def create_parser():
         version=f'{parser.prog} {__version__}',
         help="[blue]Show program's version number and exit.[/blue]"
     )
-    optional_args.add_argument(
-        '-h',
-        '--help',
-        action='help',
-        default=argparse.SUPPRESS,
-        help='[blue]Show this help message and exit.[/blue]'
-    )
 
     # Mood update: feeling determined
     # This is what I call 'o românească'
@@ -92,20 +85,28 @@ def create_parser():
         help='[blue]a first argument[/blue]'
     )
 
+    # Move the help menu here in order to include the positional arguments
+    optional_args.add_argument(
+        '-h',
+        '--help',
+        action='help',
+        default=argparse.SUPPRESS,
+        help='[blue]Show this help message and exit.[/blue]'
+    )
+
     return parser.parse_args()
 
 
-@require_root
-def sniff(interface):
-    sniffer = SnifferEngine(interface)
-    sniffer.sniff()
+async def run():
+    args = create_parser()
+
+    sniffer = SnifferEngine(args.interface)
+    # await sniffer.sniff(args.interface)
+    await render(args, sniffer)
 
 
 def main():
-    args = create_parser()
-
-    # sniff(args.interface)
-    render(args)
+    asyncio.run(run())
 
 
 if __name__ == '__main__':

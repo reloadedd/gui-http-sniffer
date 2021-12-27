@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2021-12-28
+### Added
+- Counters for total packets and HTTP packets inside the Sniffer Engine
+- Make the `run` function async (main is just the caller of the `run` function,
+kind of like a wrapper). This marks the beginning of the performance 
+improvements that the Sniffer will receive.
+- Integrate the sniffing engine with the rich display, showing packets as they
+are captured in a nice screen mimicking a GUI
+
+### Changed
+- Capture all traffic and filter for HTTP packets instead of capturing only
+IP packets, which misses some packets
+
+### Removed
+- Remove Layer 2 class because we are no longer sniffing the data link layer 
+(remember, we are here only for HTTP)
+
+### Fixed
+- Fix positional arguments not showing in help menu
+
 ## [0.3.1] - 2021-12-22
 ### Added
 - Create the Text User Interface (TUI) containing multiple columns, each one
@@ -70,7 +90,7 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.4.0...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
@@ -78,3 +98,4 @@ the version number and Git commit
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
 [0.3.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.0
 [0.3.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.1
+[0.4.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.4.0
