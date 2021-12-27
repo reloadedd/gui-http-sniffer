@@ -53,21 +53,15 @@ class SnifferEngine:
 
     async def sniff(self, count: int = -1):
         async for packet in self.__sniff():
-            # print(self.total_packet_count, self.http_packet_count)
-            # packet = self.socket.recvfrom(SnifferEngine.MAX_PACKET_LEN)[0]
             self.total_packet_count += 1
 
-            print(hexdump(packet), len(packet), b'HTTP/' in packet)
             try:
-                analyzer = PacketAnalyzer(packet)
-                print(analyzer.get_source_ip())
-                print(analyzer.get_dest_ip())
-                print(analyzer.get_source_port())
-                print(analyzer.get_dest_port())
-                print(analyzer.get_content())
+                analyzer = PacketAnalyzer(packet, self.http_packet_count)
+                # print(hexdump(packet))
+                self.http_packet_count += 1
+
+                yield self.http_packet_count, analyzer
             except UnsupportedVersionException:
                 continue
             except UninterestingPacketException:
                 continue
-
-            self.http_packet_count += 1

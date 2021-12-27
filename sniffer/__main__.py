@@ -99,7 +99,7 @@ async def run():
     args = create_parser()
 
     sniffer = SnifferEngine(args.interface)
-    # await sniff(args.interface)
+    # await sniffer.sniff(args.interface)
     await render(args, sniffer)
 
 
