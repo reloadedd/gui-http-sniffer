@@ -8,7 +8,9 @@ from rich.text import Text
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
+from rich.rule import Rule
 from ..parser.textutils import console
+from ..network.engine import SnifferEngine
 from ..utils.funcutils import get_commit_hash
 from ..__version__ import __version__
 
@@ -49,6 +51,53 @@ class Footer:
                      style="cyan")
 
 
+class SidePanel:
+    def __init__(self, sniffer):
+        self.sniffer = sniffer
+
+    def __rich__(self):
+        text = f"""\
+▶ Total Packet Count\t[b yellow]{self.sniffer.total_packet_count}[/b yellow]
+▶ HTTP Packet Count\t[b yellow]{self.sniffer.http_packet_count}[/b yellow]
+"""
+
+        return Panel(text,
+                     title="[red]Statistics[/red]",
+                     title_align="center",
+                     border_style='bold red',
+                     style="cyan")
+
+
+class Body:
+    def __init__(self, analyzer):
+        self.packets = analyzer
+
+    def __rich__(self):
+        text_list = []
+        for analyzer in self.packets:
+            formatted_packet = [
+                f'▷ [b magenta]#{analyzer.packet_count}[/b magenta]\t'
+                f'[green]{analyzer.source_ip}[/green] ⟶ '
+                f'[red]{analyzer.dest_ip}[/red] | '
+                f'[green]HTTP Version:[/green]\t'
+                f'[b]{analyzer.http_version}[/b]'
+            ]
+            # This means it's an HTTP response
+            if analyzer.http_verb is None:
+                formatted_packet.append(f' | [green]Status code:[/green]\t'
+                                        f'[b]{analyzer.status_code}[/b]\t'
+                                        f'[b purple][Response][/b purple]')
+            else:
+                formatted_packet.append(f' | [green]Method:[/green]\t'
+                                        f'[b]{analyzer.http_verb}[/b]\t'
+                                        f'[b magenta][Request][/b magenta]')
+
+            formatted_packet.append(f'\nContent: {analyzer.content}\n')
+            text_list.append(''.join(formatted_packet))
+
+        return Align.left(''.join(text_list))
+
+
 class Banner:
     """Display an animated ASCII Art text.
 
@@ -77,7 +126,7 @@ class Banner:
             Align.center(
                 Text(self.banner_array[self.index].replace('\\n', '\n'),
                      justify='left', style='bold red'), vertical='middle'),
-            border_style='dim dark_cyan'
+            border_style='bold dark_cyan'
         )
         self.index += 1
 
@@ -99,30 +148,34 @@ def intro(banner: Banner, live: Live) -> None:
         sleep(0.048)
 
 
-def render(args: argparse.Namespace):
+def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     layout = Layout()
-    panel = Panel(layout, border_style='dim dark_cyan')
+    panel = Panel(layout, border_style='bold dark_cyan')
 
     layout.split(
-        Layout(name="header", size=1),
-        Layout(ratio=1, name="main"),
-        Layout(size=3, name="footer"),
+        Layout(name='header', size=1),
+        Layout(ratio=1, name='main'),
+        Layout(size=3, name='footer'),
     )
 
-    layout["main"].split_row(Layout(name="body", ratio=3), Layout(name="side"))
-    layout["body"].update(
-        Align.left(
-            Text(
-                """This is a demonstration of rich.Layout\n\n
-Hit Ctrl+C to exit""",
-                justify="center",
-            ),
-            # vertical="middle",
+    layout['main'].split_row(Layout(name='body', ratio=3), Layout(name='side'))
+    layout['body'].update(
+        Align.center(
+            Text('Sniffing the air for unencrypted HTTP packets...',
+                 justify='center', style='dim red'),
+            vertical="middle"
         )
     )
 
-    layout["header"].update(Header())
-    layout["footer"].update(Footer(args.interface))
+    layout['header'].update(Header())
+    layout['side'].update(SidePanel(sniffer))
+    layout['footer'].update(Footer(args.interface))
+
+    return layout, panel
+
+
+async def render(args: argparse.Namespace, sniffer: SnifferEngine):
+    layout, panel = make_layouts(args, sniffer)
 
     banner = Banner()
     with Live(banner, screen=True, redirect_stderr=False) as live:
@@ -132,6 +185,13 @@ Hit Ctrl+C to exit""",
         live.update(panel)
         try:
             while True:
-                sleep(1)
+                packets = []
+                async for count, analyzer in sniffer.sniff(300):
+                    if len(packets) == 8:
+                        packets = [analyzer]
+                    else:
+                        packets.append(analyzer)
+                    layout['body'].update(Body(packets))
+                    live.refresh()
         except KeyboardInterrupt:
             pass
