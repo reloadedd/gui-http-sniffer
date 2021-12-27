@@ -178,11 +178,14 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
     layout, panel = make_layouts(args, sniffer)
 
     banner = Banner()
-    with Live(banner, screen=True, redirect_stderr=False) as live:
+    with Live(banner,
+              screen=True,
+              redirect_stderr=False,
+              auto_refresh=False) as live:
         # The coolest thing you will see today
         intro(banner, live)
 
-        live.update(panel)
+        live.update(panel, refresh=True)
         try:
             while True:
                 packets = []
