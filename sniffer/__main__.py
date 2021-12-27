@@ -60,13 +60,6 @@ def create_parser():
         version=f'{parser.prog} {__version__}',
         help="[blue]Show program's version number and exit.[/blue]"
     )
-    optional_args.add_argument(
-        '-h',
-        '--help',
-        action='help',
-        default=argparse.SUPPRESS,
-        help='[blue]Show this help message and exit.[/blue]'
-    )
 
     # Mood update: feeling determined
     # This is what I call 'o românească'
@@ -90,6 +83,15 @@ def create_parser():
     positional_args.add_argument(
         'a',
         help='[blue]a first argument[/blue]'
+    )
+
+    # Move the help menu here in order to include the positional arguments
+    optional_args.add_argument(
+        '-h',
+        '--help',
+        action='help',
+        default=argparse.SUPPRESS,
+        help='[blue]Show this help message and exit.[/blue]'
     )
 
     return parser.parse_args()
