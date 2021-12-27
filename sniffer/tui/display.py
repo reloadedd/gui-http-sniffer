@@ -75,18 +75,22 @@ class Body:
     def __rich__(self):
         text_list = []
         for analyzer in self.packets:
-            formatted_packet = [f"""\
-▷ [b magenta]#{analyzer.packet_count}[/b magenta]\t\
-[green]{analyzer.source_ip}[/green] ⟶ \
-[red]{analyzer.dest_ip}[/red] | [green]HTTP Version:[/green]\t\
-[b]{analyzer.http_version}[/b]"""]
+            formatted_packet = [
+                f'▷ [b magenta]#{analyzer.packet_count}[/b magenta]\t'
+                f'[green]{analyzer.source_ip}[/green] ⟶ '
+                f'[red]{analyzer.dest_ip}[/red] | '
+                f'[green]HTTP Version:[/green]\t'
+                f'[b]{analyzer.http_version}[/b]'
+            ]
             # This means it's an HTTP response
             if analyzer.http_verb is None:
                 formatted_packet.append(f' | [green]Status code:[/green]\t'
-                                        f'[b]{analyzer.status_code}[/b]')
+                                        f'[b]{analyzer.status_code}[/b]\t'
+                                        f'[b purple][Response][/b purple]')
             else:
                 formatted_packet.append(f' | [green]Method:[/green]\t'
-                                        f'[b]{analyzer.http_verb}[/b]')
+                                        f'[b]{analyzer.http_verb}[/b]\t'
+                                        f'[b magenta][Request][/b magenta]')
 
             formatted_packet.append(f'\nContent: {analyzer.content}\n')
             text_list.append(''.join(formatted_packet))
@@ -183,12 +187,11 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
             while True:
                 packets = []
                 async for count, analyzer in sniffer.sniff(300):
-                    if len(packets) == 10:
+                    if len(packets) == 8:
                         packets = [analyzer]
                     else:
                         packets.append(analyzer)
                     layout['body'].update(Body(packets))
                     live.refresh()
-                    # sleep(10000)
         except KeyboardInterrupt:
             pass

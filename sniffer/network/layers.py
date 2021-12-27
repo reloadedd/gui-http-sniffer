@@ -14,8 +14,8 @@ class Layer3:
 
         self.version = ip_header[0]
 
-        # if self.version != Layer3.IP_VERSION_4:
-        #     raise UnsupportedVersionException('Only IPv4 is supported')
+        if self.version != Layer3.IP_VERSION_4:
+            raise UnsupportedVersionException('Only IPv4 is supported')
 
         self.source_ip = ipaddress.IPv4Address(ip_header[2])
         self.dest_ip = ipaddress.IPv4Address(ip_header[3])
