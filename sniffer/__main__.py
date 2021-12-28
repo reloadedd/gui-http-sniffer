@@ -4,7 +4,6 @@
     that traffic.
 """
 
-import sys
 import asyncio
 import argparse
 
