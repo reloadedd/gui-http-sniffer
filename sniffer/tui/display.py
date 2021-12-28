@@ -1,18 +1,18 @@
 import argparse
 import netifaces
-from rich import box
 from time import sleep
-from rich.align import Align
 from datetime import datetime
 from rich.text import Text
-from rich.layout import Layout
 from rich.live import Live
+from rich.align import Align
 from rich.panel import Panel
-from rich.rule import Rule
+from rich.layout import Layout
+
+from ..utils import constants
+from ..__version__ import __version__
 from ..parser.textutils import console
 from ..network.engine import SnifferEngine
 from ..utils.funcutils import get_commit_hash
-from ..__version__ import __version__
 
 
 # Credits for the clock: rich module examples
@@ -27,10 +27,16 @@ class Header:
 
 class Footer:
     """Return a panel filled with information to be used as footer."""
-    def __init__(self, interface):
+    def __init__(self, interface: str = 'any',
+                 stage: str = 'beginning',
+                 count: int = constants.INFINITY,
+                 seconds: int = constants.INFINITY):
         self.interface = interface
+        self.stage = stage
+        self.count = count
+        self.seconds = seconds
 
-    def __rich__(self):
+    def __rich_footer_begin(self):
         ip_address = 'any'
         if self.interface != 'any':
             ip_address = netifaces.ifaddresses(
@@ -49,6 +55,23 @@ class Footer:
                      title_align="center",
                      border_style='bold red',
                      style="cyan")
+
+    def __rich_footer_end(self):
+        text = f'All [b cyan]{self.count}[/b cyan] packets have been ' \
+               f'sniffed! Exiting in [b cyan]{self.seconds}[/b cyan] ' \
+               f'seconds...'
+
+        return Panel(Align.center(text),
+                     title="[red]Information[/red]",
+                     title_align="center",
+                     border_style='bold red',
+                     style="cyan")
+
+    def __rich__(self):
+        if self.stage == 'beginning':
+            return self.__rich_footer_begin()
+        else:
+            return self.__rich_footer_end()
 
 
 class SidePanel:
@@ -141,11 +164,39 @@ class Banner:
 
 
 def intro(banner: Banner, live: Live) -> None:
-    """Create cinematic intro effect."""
+    """Create cinematic intro effect.
+
+    Parameters
+    ----------
+    banner : Banner
+        A renderable object that `rich` knows how to display
+    live : Live
+        The context manager object used to create the whole 'graphics'
+    """
     for frame in banner:
         live.update(frame)
         live.refresh()
         sleep(0.048)
+
+
+def outro(layout: Layout, live: Live, count: int) -> None:
+    """Create cinematic outro effect.
+    
+    Parameters
+    ----------
+    layout : Layout
+        A layout object which represent a rectangular area in the application
+    live : Live
+        The context manager object used to create the whole 'graphics'
+    count : int
+        The number of packets that were displayed   
+    """
+    for seconds in range(5, 0, -1):
+        layout['footer'].update(Footer(stage='end',
+                                       count=count,
+                                       seconds=seconds))
+        live.refresh()
+        sleep(1)
 
 
 def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
@@ -195,5 +246,8 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
                     packets.append(analyzer)
                 layout['body'].update(Body(packets))
                 live.refresh()
+
+            # This code is reachable only if the count is not `INFINITY`
+            outro(layout['footer'], live, args.count)
         except KeyboardInterrupt:
             pass
