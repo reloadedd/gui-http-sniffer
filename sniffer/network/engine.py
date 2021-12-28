@@ -13,10 +13,12 @@ class SnifferEngine:
     MAX_PACKET_LEN = 65535
 
     @require_root
-    def __init__(self, interface: str):
+    def __init__(self, interface: str, filename: str = ''):
         self.interface = interface
         self.total_packet_count = 0
         self.http_packet_count = 0
+        self.filename = filename
+        self.file_handle = self.__create_file_handle()
 
         self.socket = socket.socket(socket.AF_PACKET,
                                     socket.SOCK_RAW,
@@ -30,6 +32,26 @@ class SnifferEngine:
             self.socket.bind((self.interface, 0))
 
         # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+
+    def __create_file_handle(self):
+        """Open the requested file in write-only mode."""
+        if self.filename == '':
+            return None
+
+        return open(self.filename, 'w')
+
+    def close_handle(self):
+        """Close the opened file."""
+        if self.file_handle:
+            self.file_handle.close()
+
+    @property
+    def file_handle(self):
+        return self._file_handle
+
+    @file_handle.setter
+    def file_handle(self, value):
+        self._file_handle = value
 
     @property
     def total_packet_count(self) -> int:
@@ -48,11 +70,19 @@ class SnifferEngine:
         self._http_packet_count = value
 
     async def __sniff(self) -> typing.AsyncGenerator[bytes, None]:
+        """Primitive generator that return the next packet sniffed."""
         while True:
             yield self.socket.recvfrom(SnifferEngine.MAX_PACKET_LEN)[0]
 
     async def sniff(self,
                     count: int) -> typing.AsyncGenerator[PacketAnalyzer, None]:
+        """Filter sniffed packets and generate only HTTP packets.
+
+        Parameters
+        ----------
+        count : int
+            The number of packets to sniff. May be infinite.
+        """
         async for packet in self.__sniff():
             if count != constants.INFINITY and self.http_packet_count >= count:
                 break
@@ -63,7 +93,7 @@ class SnifferEngine:
                 analyzer = PacketAnalyzer(packet, self.http_packet_count)
                 self.http_packet_count += 1
 
-                yield self.http_packet_count, analyzer
+                yield analyzer
             # Skip over uninteresting packets
             except UnsupportedVersionException:
                 continue

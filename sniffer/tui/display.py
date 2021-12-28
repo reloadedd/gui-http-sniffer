@@ -1,3 +1,4 @@
+import asyncio
 import argparse
 import netifaces
 from time import sleep
@@ -10,9 +11,10 @@ from rich.layout import Layout
 
 from ..utils import constants
 from ..__version__ import __version__
-from ..parser.textutils import console
 from ..network.engine import SnifferEngine
 from ..utils.funcutils import get_commit_hash
+from ..network.analyzer import PacketAnalyzer
+from ..parser.textutils import write_output_to_file
 
 
 # Credits for the clock: rich module examples
@@ -225,6 +227,24 @@ def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     return layout, panel
 
 
+async def update_and_refresh(layout: Layout,
+                             live: Live,
+                             packets: list[PacketAnalyzer]) -> None:
+    """Update the screen with the new information and refresh it.
+
+    Parameters
+    ----------
+    layout : Layout
+        The rectangular area which is to be updated
+    live : Live
+        The context manager object which orchestrates the visible areas
+    packets : list[PacketAnalyzer]
+        A list containing parsed information from sniffed packets
+    """
+    layout.update(Body(packets))
+    live.refresh()
+
+
 async def render(args: argparse.Namespace, sniffer: SnifferEngine):
     layout, panel = make_layouts(args, sniffer)
 
@@ -239,15 +259,22 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
         live.update(panel, refresh=True)
         try:
             packets = []
-            async for count, analyzer in sniffer.sniff(args.count):
+            async for analyzer in sniffer.sniff(args.count):
                 if len(packets) == 8:
                     packets = [analyzer]
                 else:
                     packets.append(analyzer)
-                layout['body'].update(Body(packets))
-                live.refresh()
+
+                await asyncio.gather(*(
+                    asyncio.create_task(
+                        update_and_refresh(layout['body'], live, packets)),
+                    asyncio.create_task(
+                        write_output_to_file(sniffer.file_handle, analyzer))
+                ))
 
             # This code is reachable only if the count is not `INFINITY`
             outro(layout['footer'], live, args.count)
         except KeyboardInterrupt:
             pass
+        finally:
+            sniffer.close_handle()

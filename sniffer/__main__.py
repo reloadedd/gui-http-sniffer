@@ -4,7 +4,6 @@
     that traffic.
 """
 
-import sys
 import asyncio
 import argparse
 
@@ -19,7 +18,6 @@ from .parser.custom import ColoredArgumentParser
 
 def create_parser():
     parser = ColoredArgumentParser(
-        prog='sniffer' if sys.argv[0] == '-m' else sys.argv[0],
         description=f'{BANNER}\n{__doc__}',
         formatter_class=lambda prog: argparse.RawDescriptionHelpFormatter(
             prog,
@@ -53,6 +51,14 @@ def create_parser():
         type=int,
         default=constants.INFINITY,
         dest='count'
+    )
+    optional_args.add_argument(
+        '-o',
+        '--output',
+        help='[blue]Store the output in the given file[/blue]',
+        type=str,
+        default='',
+        dest='file'
     )
     optional_args.add_argument(
         '-l',
@@ -108,8 +114,7 @@ def create_parser():
 async def run():
     args = create_parser()
 
-    sniffer = SnifferEngine(args.interface)
-    # await sniffer.sniff(args.interface)
+    sniffer = SnifferEngine(args.interface, args.file)
     await render(args, sniffer)
 
 

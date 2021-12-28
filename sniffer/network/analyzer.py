@@ -68,7 +68,7 @@ class PacketAnalyzer:
         return 'Unknown'
 
     @property
-    def status_code(self) -> typing.Any:
+    def status_code(self) -> str | None:
         end = self.content.find(b'\r\n')
         start = self.content.find(
             self.http_version.encode('utf-8')
@@ -80,7 +80,7 @@ class PacketAnalyzer:
         return self.content[start:end].decode('utf8')
 
     @property
-    def http_verb(self) -> typing.Any:
+    def http_verb(self) -> str | None:
         for method in PacketAnalyzer.HTTP_METHODS:
             if self.content.startswith(method.encode('utf-8')):
                 return method
