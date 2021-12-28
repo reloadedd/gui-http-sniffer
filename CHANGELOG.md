@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add `-c/--count` option which allow for a fixed number of packets to be
 captured by the sniffer
+- Add `-o/--output` option which give the user the possibility to save the
+output from sniffed packets to a file for later reviewing
 
 ## [0.4.0] - 2021-12-28
 ### Added

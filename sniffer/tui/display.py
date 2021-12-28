@@ -1,5 +1,8 @@
 import argparse
+import typing
+
 import netifaces
+import asyncio
 from time import sleep
 from datetime import datetime
 from rich.text import Text
@@ -10,7 +13,7 @@ from rich.layout import Layout
 
 from ..utils import constants
 from ..__version__ import __version__
-from ..parser.textutils import console
+from ..network.analyzer import PacketAnalyzer
 from ..network.engine import SnifferEngine
 from ..utils.funcutils import get_commit_hash
 
@@ -225,6 +228,63 @@ def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     return layout, panel
 
 
+async def write_output_to_file(handle: typing.TextIO,
+                               analyzer: PacketAnalyzer) -> None:
+    """Write the output from sniffed packets to a file.
+
+    If the user didn't chose to save the output to a file, the function will
+    simply exit by returning None.
+
+    Parameters
+    ----------
+    handle : typing.TextIO
+        The file handle corresponding to the output file
+    analyzer : PacketAnalyzer
+        Parsed information from the currently sniffed packet
+    """
+    if not handle:
+        return
+
+    formatted_packet = [
+        f'▷ #{analyzer.packet_count}\t'
+        f'{analyzer.source_ip} ⟶ '
+        f'{analyzer.dest_ip} | '
+        f'HTTP Version:\t'
+        f'{analyzer.http_version}'
+    ]
+
+    # This means it's an HTTP response
+    if analyzer.http_verb is None:
+        formatted_packet.append(f' | Status code:\t'
+                                f'{analyzer.status_code}\t'
+                                f'[Response]')
+    else:
+        formatted_packet.append(f' | Method:\t'
+                                f'{analyzer.http_verb}\t'
+                                f'[Request]')
+
+    formatted_packet.append(f'\nContent: {analyzer.content}\n')
+    handle.write(''.join(formatted_packet))
+
+
+async def update_and_refresh(layout: Layout,
+                             live: Live,
+                             packets: list[PacketAnalyzer]) -> None:
+    """Update the screen with the new information and refresh it.
+
+    Parameters
+    ----------
+    layout : Layout
+        The rectangular area which is to be updated
+    live : Live
+        The context manager object which orchestrates the visible areas
+    packets : list[PacketAnalyzer]
+        A list containing parsed information from sniffed packets
+    """
+    layout.update(Body(packets))
+    live.refresh()
+
+
 async def render(args: argparse.Namespace, sniffer: SnifferEngine):
     layout, panel = make_layouts(args, sniffer)
 
@@ -239,15 +299,22 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
         live.update(panel, refresh=True)
         try:
             packets = []
-            async for count, analyzer in sniffer.sniff(args.count):
+            async for analyzer in sniffer.sniff(args.count):
                 if len(packets) == 8:
                     packets = [analyzer]
                 else:
                     packets.append(analyzer)
-                layout['body'].update(Body(packets))
-                live.refresh()
+
+                await asyncio.gather(*(
+                    asyncio.create_task(
+                        update_and_refresh(layout['body'], live, packets)),
+                    asyncio.create_task(
+                        write_output_to_file(sniffer.file_handle, analyzer))
+                ))
 
             # This code is reachable only if the count is not `INFINITY`
             outro(layout['footer'], live, args.count)
         except KeyboardInterrupt:
             pass
+        finally:
+            sniffer.close_handle()
