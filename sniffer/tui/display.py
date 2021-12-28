@@ -187,14 +187,13 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
 
         live.update(panel, refresh=True)
         try:
-            while True:
-                packets = []
-                async for count, analyzer in sniffer.sniff(300):
-                    if len(packets) == 8:
-                        packets = [analyzer]
-                    else:
-                        packets.append(analyzer)
-                    layout['body'].update(Body(packets))
-                    live.refresh()
+            packets = []
+            async for count, analyzer in sniffer.sniff(args.count):
+                if len(packets) == 8:
+                    packets = [analyzer]
+                else:
+                    packets.append(analyzer)
+                layout['body'].update(Body(packets))
+                live.refresh()
         except KeyboardInterrupt:
             pass

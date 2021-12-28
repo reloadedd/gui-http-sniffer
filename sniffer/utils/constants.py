@@ -13,3 +13,6 @@ ETH_P_ALL = 0x0003
 
 # Effective User ID (EUID) for root user
 ROOT_EUID = 0
+
+# A constant number symbolizing infinity
+INFINITY = -0xdeadbeef
