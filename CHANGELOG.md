@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add `-c/--count` option which allow for a fixed number of packets to be
+captured by the sniffer
+
 ## [0.4.0] - 2021-12-28
 ### Added
 - Counters for total packets and HTTP packets inside the Sniffer Engine
