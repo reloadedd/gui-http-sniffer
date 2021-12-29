@@ -3,7 +3,6 @@ from rich.console import Console
 
 
 from .. import __version__
-from ..network.analyzer import PacketAnalyzer
 from ..utils.funcutils import get_commit_hash
 
 # Global object which will be used throughout the whole package
@@ -26,7 +25,7 @@ EPILOG = "© Copyright 2021-2022, Roșca Ionuț."
 
 
 async def write_output_to_file(handle: typing.TextIO,
-                               analyzer: PacketAnalyzer) -> None:
+                               analyzer: "PacketAnalyzer") -> None:
     """Write the output from sniffed packets to a file.
 
     If the user didn't chose to save the output to a file, the function will
@@ -43,7 +42,8 @@ async def write_output_to_file(handle: typing.TextIO,
         return
 
     formatted_packet = [
-        f'▷ #{analyzer.packet_count}\t'
+        f'{"=" * 20}\n'
+        f'#{analyzer.packet_count}\t'
         f'{analyzer.source_ip} ⟶ '
         f'{analyzer.dest_ip} | '
         f'HTTP Version:\t'
@@ -60,5 +60,18 @@ async def write_output_to_file(handle: typing.TextIO,
                                 f'{analyzer.http_verb}\t'
                                 f'[Request]')
 
-    formatted_packet.append(f'\nContent: {analyzer.content}\n')
+    if analyzer.http_verb is not None:
+        formatted_packet.append(f'\n\tPath: {analyzer.request_path}')
+
+    formatted_packet.append('\n\tHeaders:')
+    for key, value in analyzer.http_headers:
+        formatted_packet.append(f'\n\t\t{key}: {value}')
+
+    formatted_packet.append('\n\tBody:')
+
+    if not analyzer.http_body:
+        formatted_packet.append('\n\t\t<empty>\n\n')
+    else:
+        formatted_packet.append(f'\n\t\t{analyzer.http_body}\n\n')
+
     handle.write(''.join(formatted_packet))
