@@ -130,7 +130,7 @@ class Body:
                 path = tree.add('⚫[b magenta]Path[/b magenta]')
                 path.add(f'{analyzer.request_path}')
 
-            headers = tree.add(f'⚫[b magenta]Headers[/b magenta] -> {analyzer.packet_height}')
+            headers = tree.add('⚫[b magenta]Headers[/b magenta]')
             for key, value in analyzer.http_headers:
                 headers.add(f'[b green]{key}:[/b green]{value}')
 
