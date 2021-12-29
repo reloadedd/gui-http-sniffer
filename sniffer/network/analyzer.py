@@ -1,5 +1,6 @@
 import re
 import typing
+from urllib.parse import unquote
 from .layers import Layer3, Layer4, Layer7
 from ..exceptions.network import UninterestingPacketException
 
@@ -86,3 +87,18 @@ class PacketAnalyzer:
                 return method
 
         return None
+
+    @property
+    def request_path(self) -> str:
+        regex = re.compile(br'\w{3,7}\s(.*)\sHTTP')
+
+        if match_obj := regex.match(self.content):
+            return unquote(match_obj.group(1).decode('utf8'))
+
+        return ''
+
+    @property
+    def http_headers(self):
+        headers = self.content.split(b'\r\n')
+
+        return headers
