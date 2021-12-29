@@ -4,22 +4,20 @@
     that traffic.
 """
 
-import sys
 import asyncio
 import argparse
+
+from .utils import constants
+from .tui.display import render
 from .__version__ import __version__
 from .network.engine import SnifferEngine
-from .utils.constants import EXIT_SUCCESS
-from .utils.constants import PARSER_IGNORE
 from .parser.options import list_interfaces
 from .parser.textutils import BANNER, EPILOG
 from .parser.custom import ColoredArgumentParser
-from .tui.display import render
 
 
 def create_parser():
     parser = ColoredArgumentParser(
-        prog='sniffer' if sys.argv[0] == '-m' else sys.argv[0],
         description=f'{BANNER}\n{__doc__}',
         formatter_class=lambda prog: argparse.RawDescriptionHelpFormatter(
             prog,
@@ -47,6 +45,22 @@ def create_parser():
         dest='interface'
     )
     optional_args.add_argument(
+        '-c',
+        '--count',
+        help='[blue]How many packets to sniff[/blue]',
+        type=int,
+        default=constants.INFINITY,
+        dest='count'
+    )
+    optional_args.add_argument(
+        '-o',
+        '--output',
+        help='[blue]Store the output in the given file[/blue]',
+        type=str,
+        default='',
+        dest='file'
+    )
+    optional_args.add_argument(
         '-l',
         '--list-interfaces',
         help='[blue]List all network interfaces present in the system[/blue]',
@@ -67,7 +81,7 @@ def create_parser():
     usage.add_argument(
         f'[u]{parser.format_usage()[7: 7 + len(parser.prog)]}[/u]'
         f'{parser.format_usage()[7 + len(parser.prog):]}',
-        default=PARSER_IGNORE,
+        default=constants.PARSER_IGNORE,
         nargs='?'   # Bypass the required value for positional arguments
     )
 
@@ -77,7 +91,7 @@ def create_parser():
 
     if parsed.list_interfaces:
         list_interfaces()
-        exit(EXIT_SUCCESS)
+        exit(constants.EXIT_SUCCESS)
 
     # This will be parsed after checking all optional arguments
     positional_args.add_argument(
@@ -100,8 +114,7 @@ def create_parser():
 async def run():
     args = create_parser()
 
-    sniffer = SnifferEngine(args.interface)
-    # await sniffer.sniff(args.interface)
+    sniffer = SnifferEngine(args.interface, args.file)
     await render(args, sniffer)
 
 

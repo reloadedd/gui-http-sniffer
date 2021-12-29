@@ -1,5 +1,7 @@
 import re
 import typing
+from urllib.parse import unquote
+from ..parser.textutils import console
 from .layers import Layer3, Layer4, Layer7
 from ..exceptions.network import UninterestingPacketException
 
@@ -68,7 +70,7 @@ class PacketAnalyzer:
         return 'Unknown'
 
     @property
-    def status_code(self) -> typing.Any:
+    def status_code(self) -> str | None:
         end = self.content.find(b'\r\n')
         start = self.content.find(
             self.http_version.encode('utf-8')
@@ -80,9 +82,52 @@ class PacketAnalyzer:
         return self.content[start:end].decode('utf8')
 
     @property
-    def http_verb(self) -> typing.Any:
+    def http_verb(self) -> str | None:
         for method in PacketAnalyzer.HTTP_METHODS:
             if self.content.startswith(method.encode('utf-8')):
                 return method
 
         return None
+
+    @property
+    def request_path(self) -> str:
+        regex = re.compile(br'\w{3,7}\s(.*)\sHTTP')
+
+        if match_obj := regex.match(self.content):
+            return unquote(match_obj.group(1).decode('utf8'))
+
+        return ''
+
+    @property
+    def http_headers(self) -> \
+            typing.Generator[tuple[str | bytes, str | bytes], None, None]:
+        for header in self.content.split(b'\r\n')[1:]:
+            if not header:
+                break
+
+            try:
+                key = header.split(b':')[0].decode('utf8')
+                value = header.split(b':')[1].decode('utf8')
+            except UnicodeDecodeError:
+                key = header.split(b':')[0]
+                value = header.split(b':')[1]
+
+            yield key, value
+
+    @property
+    def http_body(self):
+        return self.content.split(b'\r\n\r\n')[1]
+
+    @property
+    def packet_height(self):
+        headers_len = len([_ for _ in self.http_headers])
+        # Some crazy math: 3/4 is the ratio of the 'body' layout
+        # 12 characters are taken by the tree's branch
+        # 1 character in case the text is less than one line
+        body_len = len(self.http_body) // (console.width * 3 // 4 - 12) + 1
+
+        path_len = 0
+        if self.request_path:
+            path_len = 2
+
+        return sum((3, 2, path_len, headers_len, body_len))
