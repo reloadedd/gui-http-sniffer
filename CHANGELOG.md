@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 captured by the sniffer
 - Add `-o/--output` option which give the user the possibility to save the
 output from sniffed packets to a file for later reviewing
+- Improve the UI by displaying the HTTP packets formatted properly and stylish
 
 ## [0.4.0] - 2021-12-28
 ### Added

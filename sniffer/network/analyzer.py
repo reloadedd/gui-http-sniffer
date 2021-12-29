@@ -98,8 +98,20 @@ class PacketAnalyzer:
         return ''
 
     @property
-    def http_headers(self):
-        return self.content.split(b'\r\n')[1:]
+    def http_headers(self) -> \
+            typing.Generator[tuple[str | bytes, str | bytes], None, None]:
+        for header in self.content.split(b'\r\n')[1:]:
+            if not header:
+                break
+
+            try:
+                key = header.split(b':')[0].decode('utf8')
+                value = header.split(b':')[1].decode('utf8')
+            except UnicodeDecodeError:
+                key = header.split(b':')[0]
+                value = header.split(b':')[1]
+
+            yield key, value
 
     @property
     def http_body(self):
