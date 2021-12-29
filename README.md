@@ -56,6 +56,7 @@ associated branch: `release/<version>`
 - Value for the protocol argument in `socket()` call: [htons(0x800)](https://stackoverflow.com/a/46224239)
 - Linux cooked-mode capture: [Wireshark docs](https://wiki.wireshark.org/SLL)
 - Socket options list: [Shichao's Notes](https://notes.shichao.io/unp/ch7/)
+- Async IO in Python: A Complete Walkthrough: [Real Python](https://realpython.com/async-io-python/)
 
 ## Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

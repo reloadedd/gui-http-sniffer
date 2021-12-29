@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2021-12-30
+### Added
+- Add `-c/--count` option which allow for a fixed number of packets to be
+captured by the sniffer
+- Add `-o/--output` option which give the user the possibility to save the
+output from sniffed packets to a file for later reviewing
+- Improve the UI by displaying the HTTP packets formatted properly and stylish
+  - The packets will fit in a panel and only take the required space to be
+displayed, nothing more, nothing less
+
+### Changed
+- Rename the footer bar from **Information** to **Status**
+
 ## [0.4.0] - 2021-12-28
 ### Added
 - Counters for total packets and HTTP packets inside the Sniffer Engine
@@ -90,7 +103,7 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.5.0...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
@@ -99,3 +112,4 @@ the version number and Git commit
 [0.3.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.0
 [0.3.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.3.1
 [0.4.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.4.0
+[0.5.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.0
