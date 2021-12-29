@@ -1,6 +1,7 @@
 import re
 import typing
 from urllib.parse import unquote
+from ..parser.textutils import console
 from .layers import Layer3, Layer4, Layer7
 from ..exceptions.network import UninterestingPacketException
 
@@ -116,3 +117,17 @@ class PacketAnalyzer:
     @property
     def http_body(self):
         return self.content.split(b'\r\n\r\n')[1]
+
+    @property
+    def packet_height(self):
+        headers_len = len([_ for _ in self.http_headers])
+        # Some crazy math: 3/4 is the ratio of the 'body' layout
+        # 12 characters are taken by the tree's branch
+        # 1 character in case the text is less than one line
+        body_len = len(self.http_body) // (console.width * 3 // 4 - 12) + 1
+
+        path_len = 0
+        if self.request_path:
+            path_len = 2
+
+        return sum((3, 2, path_len, headers_len, body_len))

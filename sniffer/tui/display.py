@@ -130,11 +130,11 @@ class Body:
                 path = tree.add('⚫[b magenta]Path[/b magenta]')
                 path.add(f'{analyzer.request_path}')
 
-            headers = tree.add('⚫[b magenta]Headers[/b magenta]')
+            headers = tree.add(f'⚫[b magenta]Headers[/b magenta] -> {analyzer.packet_height}')
             for key, value in analyzer.http_headers:
-                headers.add(f'[b green]{key}: [/b green]{value}')
+                headers.add(f'[b green]{key}:[/b green]{value}')
 
-            body = tree.add(f'⚫[b magenta]Body[/b magenta] -> {self.max_height}')
+            body = tree.add('⚫[b magenta]Body[/b magenta]')
 
             if not analyzer.http_body:
                 body.add('[b purple]<empty>[/b purple]')
@@ -144,7 +144,7 @@ class Body:
             packet_list.append(Panel(tree,
                                      expand=True,
                                      border_style='dim white',
-                                     height=12))
+                                     height=analyzer.packet_height))
 
         return Columns(packet_list, expand=True)
 
@@ -274,6 +274,22 @@ async def update_and_refresh(layout: Layout,
     live.refresh()
 
 
+async def fit_packets(packets: list[PacketAnalyzer], max_height: int) -> None:
+    """Fit the packets to the screen by height.
+
+    Parameters
+    ----------
+    packets : list[PacketAnalyzer]
+        The list of HTTP packets
+    max_height : int
+        The maximum height allowed to be used for displaying the packets on
+        the screen
+    """
+    cumulative_sum = sum((packet.packet_height for packet in packets))
+    while len(packets) > 1 and cumulative_sum > max_height:
+        packets.pop(0)
+
+
 async def render(args: argparse.Namespace, sniffer: SnifferEngine):
     layout, panel = make_layouts(args, sniffer)
 
@@ -290,18 +306,20 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
         live.update(panel, refresh=True)
         try:
             packets = []
+
             async for analyzer in sniffer.sniff(args.count):
-                if len(packets) == 3:
-                    packets = [analyzer]
-                else:
-                    packets.append(analyzer)
+                # 3 is footer + 1 is header + 2 for the borders (top & bottom)
+                max_height = console.height - 6
+
+                packets.append(analyzer)
+                await fit_packets(packets, max_height)
 
                 await asyncio.gather(*(
                     asyncio.create_task(
                         update_and_refresh(layout['body'],
                                            live,
                                            packets,
-                                           console.height)),
+                                           max_height)),
                     asyncio.create_task(
                         write_output_to_file(sniffer.file_handle, analyzer))
                 ))

@@ -3,7 +3,6 @@ from rich.console import Console
 
 
 from .. import __version__
-from ..network.analyzer import PacketAnalyzer
 from ..utils.funcutils import get_commit_hash
 
 # Global object which will be used throughout the whole package
@@ -26,7 +25,7 @@ EPILOG = "© Copyright 2021-2022, Roșca Ionuț."
 
 
 async def write_output_to_file(handle: typing.TextIO,
-                               analyzer: PacketAnalyzer) -> None:
+                               analyzer: "PacketAnalyzer") -> None:
     """Write the output from sniffed packets to a file.
 
     If the user didn't chose to save the output to a file, the function will
