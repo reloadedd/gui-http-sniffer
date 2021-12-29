@@ -115,9 +115,23 @@ class Body:
             else:
                 formatted_packet.append(f' | [green]Method:[/green]\t'
                                         f'[b]{analyzer.http_verb}[/b]\t'
-                                        f'[b magenta][Request][/b magenta]')
+                                        f'[b magenta][Request][/b magenta]'
+                                        f'\n\t[b magenta]Path:\t[/b magenta]'
+                                        f'{analyzer.request_path}')
 
-            formatted_packet.append(f'\nContent: {analyzer.content}\n')
+            for header in analyzer.http_headers:
+                if not header:
+                    break
+
+                try:
+                    text = header.decode('utf-8')
+                except UnicodeDecodeError:
+                    text = header
+
+                formatted_packet.append(
+                    f'[b purple]\n\tHeaders:[/b purple] {text}'
+                )
+            formatted_packet.append(f'\n\tContent: {analyzer.http_body}\n')
             text_list.append(''.join(formatted_packet))
 
         return Align.left(''.join(text_list))
