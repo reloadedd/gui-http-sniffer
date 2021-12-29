@@ -56,7 +56,7 @@ class Footer:
                f'Version: v{__version__}'
 
         return Panel(Text(text, justify="center"),
-                     title="[red]Information[/red]",
+                     title="[red]Status[/red]",
                      title_align="center",
                      border_style='bold red',
                      style="cyan")
@@ -67,7 +67,7 @@ class Footer:
                f'seconds...'
 
         return Panel(Align.center(text),
-                     title="[red]Information[/red]",
+                     title="[red]Status[/red]",
                      title_align="center",
                      border_style='bold red',
                      style="cyan")
