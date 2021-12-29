@@ -111,8 +111,7 @@ class Body:
             if analyzer.http_verb is None:
                 formatted_packet.append(f' | [green]Status code:[/green]\t'
                                         f'[b]{analyzer.status_code}[/b]\t'
-                                        f'[b purple][Response][/b purple]'
-                                        f'[b purple]\nHeaders: {analyzer.http_headers}[/b purple]')
+                                        f'[b purple][Response][/b purple]')
             else:
                 formatted_packet.append(f' | [green]Method:[/green]\t'
                                         f'[b]{analyzer.http_verb}[/b]\t'
@@ -120,7 +119,19 @@ class Body:
                                         f'\n\t[b magenta]Path:\t[/b magenta]'
                                         f'{analyzer.request_path}')
 
-            formatted_packet.append(f'\n\tContent: {analyzer.content}\n')
+            for header in analyzer.http_headers:
+                if not header:
+                    break
+
+                try:
+                    text = header.decode('utf-8')
+                except UnicodeDecodeError:
+                    text = header
+
+                formatted_packet.append(
+                    f'[b purple]\n\tHeaders:[/b purple] {text}'
+                )
+            formatted_packet.append(f'\n\tContent: {analyzer.http_body}\n')
             text_list.append(''.join(formatted_packet))
 
         return Align.left(''.join(text_list))

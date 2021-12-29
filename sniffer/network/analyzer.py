@@ -99,6 +99,8 @@ class PacketAnalyzer:
 
     @property
     def http_headers(self):
-        headers = self.content.split(b'\r\n')
+        return self.content.split(b'\r\n')[1:]
 
-        return headers
+    @property
+    def http_body(self):
+        return self.content.split(b'\r\n\r\n')[1]
