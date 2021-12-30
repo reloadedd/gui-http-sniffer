@@ -51,7 +51,9 @@ associated branch: `release/<version>`
 - RFC 791 - [IP Header Format](https://datatracker.ietf.org/doc/html/rfc791#section-3.1)
 - RFC 793 - [TCP Header Format](https://datatracker.ietf.org/doc/html/rfc793#section-3.1)
 - Python [struct](https://docs.python.org/3/library/struct.html) module
-- Python [socket](https://docs.python.org/3/library/socket.html) module 
+- Python [socket](https://docs.python.org/3/library/socket.html) module
+- rich module's [Read The Docs](https://rich.readthedocs.io/en/stable/)
+- rich module's [Github Page](https://github.com/willmcgugan/rich)
 - What is the difference between recv and recvfrom? [Let's find out](https://forums.codeguru.com/showthread.php?218423-What-is-the-difference-between-recv-and-recvfrom)
 - Value for the protocol argument in `socket()` call: [htons(0x800)](https://stackoverflow.com/a/46224239)
 - Linux cooked-mode capture: [Wireshark docs](https://wiki.wireshark.org/SLL)
