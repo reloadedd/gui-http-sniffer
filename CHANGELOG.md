@@ -12,6 +12,11 @@ break compatibility with Python < 3.10
 - Sniffing won't be available on Windows because of technical complications
 (sorry Windows users)
 
+### Security
+- Fix crash caused by specially crafting packets that contained rich tags,
+we'll consider this an RCE because it had the ability to alter program's
+rendering of colors and ultimately, crash it
+
 ## [0.5.0] - 2021-12-30
 ### Added
 - Add `-c/--count` option which allow for a fixed number of packets to be
