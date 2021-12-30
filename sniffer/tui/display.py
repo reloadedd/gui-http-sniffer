@@ -33,7 +33,19 @@ class Header:
 
 
 class Footer:
-    """Return a panel filled with information to be used as footer."""
+    """Return a panel filled with information to be used as footer.
+
+    Attributes
+    ----------
+    interface : str, optional
+        The network interface used. Defaults to 'any'.
+    stage : str, optional
+        The current stage. Defaults to 'beginning'. Other option is 'end'.
+    count : int, optional
+        The number of packets to be sniffed by the engine.
+    seconds : int, optional
+        The number of seconds to wait before quitting.
+    """
     def __init__(self, interface: str = 'any',
                  stage: str = 'beginning',
                  count: int = constants.INFINITY,
@@ -82,6 +94,15 @@ class Footer:
 
 
 class SidePanel:
+    """Draw a side panel in the right area of the terminal.
+
+    Attributes
+    ----------
+    sniffer : SnifferEngine
+        The sniffer object, used for harvesting information.
+    _filter : str
+        The filter currently used for packets.
+    """
     def __init__(self, sniffer: SnifferEngine, _filter: str):
         self.sniffer = sniffer
         self.filter = _filter
@@ -111,6 +132,15 @@ class SidePanel:
 
 
 class Body:
+    """Draw the entire body and displays live the sniffed packets.
+
+    Attributes
+    ----------
+    packets : list[PacketAnalyzer]
+        A list with the current packets that will be displayed.
+    max_height : int
+        The maximum height that could be used to display packet information.
+    """
     def __init__(self, analyzer: list[PacketAnalyzer], max_height: int):
         self.packets = analyzer
         self.max_height = max_height
@@ -169,6 +199,13 @@ class Banner:
     This class implements an iterator, which at each step return the next
     frame in the animation. A frame, in this context, is an entry in a string
     list.
+
+    Attributes
+    ----------
+    index : int
+        Keep track of the current frame when iterated.
+    banner_array : list[str]
+        A list with all the frames.
     """
     # Path is relative to the sniffer package
     # Credits for the animation: https://ascii.co.uk/animated
@@ -242,6 +279,26 @@ def outro(layout: Layout, live: Live, count: int) -> None:
 
 
 def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
+    """Create the layouts for the application.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The list of all command-line arguments.
+    sniffer : SnifferEngine
+        The sniffer object.
+
+    Returns
+    -------
+    Layout
+        An layout incorporating all the layouts.
+    Panel
+        All layouts are encapsulated inside this panel.
+
+    Notes
+    -----
+    The Panel is used for drawing the borders of the application.
+    """
     layout = Layout()
     panel = Panel(layout, border_style='bold dark_cyan')
 
@@ -304,7 +361,21 @@ async def fit_packets(packets: list[PacketAnalyzer], max_height: int) -> None:
         packets.pop(0)
 
 
-async def render(args: argparse.Namespace, sniffer: SnifferEngine):
+async def render(args: argparse.Namespace, sniffer: SnifferEngine) -> None:
+    """Render the application and coordinate the backend.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The list of all command-line arguments.
+    sniffer : SnifferEngine
+        The sniffer object.
+
+    Notes
+    -----
+    Even though not explicitly stated, this method is the brain of the
+    application as it coordinates both the fronted and the backend.
+    """
     layout, panel = make_layouts(args, sniffer)
 
     banner = Banner()

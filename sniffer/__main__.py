@@ -16,7 +16,14 @@ from .parser.textutils import BANNER, EPILOG
 from .parser.custom import ColoredArgumentParser
 
 
-def create_parser():
+def create_parser() -> argparse.Namespace:
+    """Create the parser with the given arguments.
+
+    Returns
+    -------
+    argparse.Namespace
+        An object containing parsed options and their values.
+    """
     parser = ColoredArgumentParser(
         description=f'{BANNER}\n{__doc__}',
         formatter_class=lambda prog: argparse.RawDescriptionHelpFormatter(
@@ -101,6 +108,7 @@ def create_parser():
 
 
 async def run():
+    """Initialize the components and run the application."""
     args = create_parser()
 
     sniffer = SnifferEngine(args.interface, args.file)
@@ -108,6 +116,10 @@ async def run():
 
 
 def main():
+    """Wrapper over the `run()` function.
+
+    Needed for async IO.
+    """
     asyncio.run(run())
 
 

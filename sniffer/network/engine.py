@@ -9,6 +9,23 @@ from ..exceptions.network import UninterestingPacketException,\
 
 
 class SnifferEngine:
+    """The Sniffer Engine sniffs the packets that flow through the network.
+
+    Attributes
+    ----------
+    interface : str
+        The name of the interface to be used for sniffing packets.
+    total_packet_count : int
+        The total number of packets sniffed.
+    http_packet_count : int
+        The number of HTTP packets sniffed.
+    filename : str, optional
+        The name of the file to be used for writing the output.
+    file_handle : typing.TextIO
+        The handle to the opened file.
+    socket : socket.socket
+        The socket used for sniffing packets.
+    """
     NET_INTERFACE_ANY = 'any'
     INFINITY = -1
     MAX_PACKET_LEN = 65535
@@ -30,52 +47,66 @@ class SnifferEngine:
             # Attach to network interface
             self.socket.bind((self.interface, 0))
 
-    def __create_file_handle(self):
+    def __create_file_handle(self) -> typing.Any:
         """Open the requested file in write-only mode."""
         if self.filename == '':
             return None
 
         return open(self.filename, 'w')
 
-    def close_handle(self):
+    def close_handle(self) -> None:
         """Close the opened file."""
         if self.file_handle:
             self.file_handle.close()
 
     @property
-    def file_handle(self):
+    def file_handle(self) -> typing.TextIO:
+        """Get the file handle."""
         return self._file_handle
 
     @file_handle.setter
-    def file_handle(self, value):
+    def file_handle(self, value) -> None:
+        """Set the file handle."""
         self._file_handle = value
 
     @property
     def total_packet_count(self) -> int:
+        """Get the total number of sniffed packets."""
         return self._packet_count
 
     @total_packet_count.setter
     def total_packet_count(self, value) -> None:
+        """Set the total number of sniffed packets."""
         self._packet_count = value
 
     @property
-    def filtered_packets(self):
+    def filtered_packets(self) -> int:
+        """Get the number of filtered packets."""
         return self._filtered_packets
 
     @filtered_packets.setter
-    def filtered_packets(self, value):
+    def filtered_packets(self, value) -> None:
+        """Set the number of filtered packets."""
         self._filtered_packets = value
 
     @property
     def http_packet_count(self) -> int:
+        """Get the number of HTTP packets."""
         return self._http_packet_count
 
     @http_packet_count.setter
     def http_packet_count(self, value) -> None:
+        """Set the number of HTTP packets."""
         self._http_packet_count = value
 
     async def __sniff(self) -> typing.AsyncGenerator[bytes, None]:
-        """Primitive generator that return the next packet sniffed."""
+        """Primitive generator that yields the next packet sniffed.
+
+        Yields
+        ------
+        bytes
+            The sniffed packet.
+        """
         while True:
             yield self.socket.recvfrom(SnifferEngine.MAX_PACKET_LEN)[0]
 
@@ -87,6 +118,11 @@ class SnifferEngine:
         ----------
         count : int
             The number of packets to sniff. May be infinite.
+
+        Yields
+        ------
+        PacketAnalyzer
+            The content of the sniffed packet, wrapped in a parsable format.
         """
         async for packet in self.__sniff():
             if count != constants.INFINITY and self.http_packet_count >= count:

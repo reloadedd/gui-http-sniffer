@@ -4,13 +4,32 @@ from ..utils import constants
 
 
 class Filter:
-    """Class that provides filtering for network packets."""
+    """Class that provides filtering for network packets.
+
+    Attributes
+    ----------
+    analyzer : PacketAnalyzer
+        A parsable format that wraps a packet.
+    filter : str
+        The filter to be applied.
+    """
     def __init__(self, analyzer: "PacketAnalyzer", _filter: str):
         self.analyzer = analyzer
         self.filter = _filter
 
     def _apply_ip_filter(self, _filter: str) -> bool:
-        """Apply filters at layer 3."""
+        """Apply filters at layer 3.
+
+        Parameters
+        ----------
+        _filter : str
+            The filter to be applied.
+
+        Returns
+        -------
+        bool
+            Whether or not the filter passed the filters.
+        """
         components = tuple(comp.strip() for comp in _filter.split('='))
 
         match components[0]:
@@ -22,7 +41,18 @@ class Filter:
                 return False
 
     def _apply_http_filter(self, _filter: str) -> bool:
-        """Apply filters at layer 7."""
+        """Apply filters at layer 7.
+
+        Parameters
+        ----------
+        _filter : str
+            The filter to be applied.
+
+        Returns
+        -------
+        bool
+            Whether or not the filter passed the filters.
+        """
         components = tuple(comp.strip() for comp in _filter.split('='))
 
         match components[0]:
