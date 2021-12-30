@@ -27,15 +27,15 @@ def create_parser():
         epilog=EPILOG
     )
 
-    positional_args = parser.add_argument_group('POSITIONAL ARGUMENTS')
-
-    optional_args = parser.add_argument_group('OPTIONAL ARGUMENTS')
+    optional_args = parser.add_argument_group('ARGUMENTS')
     optional_args.add_argument(
         '-f',
         '--filter',
-        default=argparse.SUPPRESS,
         help='[blue]Filter expression to be applied when sniffing traffic.'
-             '[/blue]'
+             '[/blue]',
+        type=str,
+        default='[b magenta]<no filters>[/b magenta]',
+        dest='filter'
     )
     optional_args.add_argument(
         '-i',
@@ -74,6 +74,13 @@ def create_parser():
         version=f'{parser.prog} {__version__}',
         help="[blue]Show program's version number and exit.[/blue]"
     )
+    optional_args.add_argument(
+        '-h',
+        '--help',
+        action='help',
+        default=argparse.SUPPRESS,
+        help='[blue]Show this help message and exit.[/blue]'
+    )
 
     # Mood update: feeling determined
     # This is what I call 'o românească'
@@ -85,30 +92,12 @@ def create_parser():
         nargs='?'   # Bypass the required value for positional arguments
     )
 
-    # By parsing all the arguments until here, we are able to bypass the need
-    # to fill the positional arguments
-    parsed, _ = parser.parse_known_args()
-
+    parsed = parser.parse_args()
     if parsed.list_interfaces:
         list_interfaces()
         exit(constants.EXIT_SUCCESS)
 
-    # This will be parsed after checking all optional arguments
-    positional_args.add_argument(
-        'a',
-        help='[blue]a first argument[/blue]'
-    )
-
-    # Move the help menu here in order to include the positional arguments
-    optional_args.add_argument(
-        '-h',
-        '--help',
-        action='help',
-        default=argparse.SUPPRESS,
-        help='[blue]Show this help message and exit.[/blue]'
-    )
-
-    return parser.parse_args()
+    return parsed
 
 
 async def run():
