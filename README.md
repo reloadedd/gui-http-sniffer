@@ -54,11 +54,12 @@ associated branch: `release/<version>`
 - Python [socket](https://docs.python.org/3/library/socket.html) module
 - rich module's [Read The Docs](https://rich.readthedocs.io/en/stable/)
 - rich module's [Github Page](https://github.com/willmcgugan/rich)
-- What is the difference between recv and recvfrom? [Let's find out](https://forums.codeguru.com/showthread.php?218423-What-is-the-difference-between-recv-and-recvfrom)
+- What is the difference between `recv` and `recvfrom`? [Let's find out](https://forums.codeguru.com/showthread.php?218423-What-is-the-difference-between-recv-and-recvfrom)
 - Value for the protocol argument in `socket()` call: [htons(0x800)](https://stackoverflow.com/a/46224239)
 - Linux cooked-mode capture: [Wireshark docs](https://wiki.wireshark.org/SLL)
 - Socket options list: [Shichao's Notes](https://notes.shichao.io/unp/ch7/)
 - Async IO in Python: A Complete Walkthrough: [Real Python](https://realpython.com/async-io-python/)
+- Auto-Documenting a Python Project Using Sphinx: [BetterProgramming](https://betterprogramming.pub/auto-documenting-a-python-project-using-sphinx-8878f9ddc6e9)
 
 ## Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
