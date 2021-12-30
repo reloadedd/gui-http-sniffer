@@ -17,6 +17,7 @@ class SnifferEngine:
         self.interface = interface
         self.total_packet_count = 0
         self.http_packet_count = 0
+        self.filtered_packets = 0
         self.filename = filename
         self.file_handle = self.__create_file_handle()
 
@@ -24,14 +25,9 @@ class SnifferEngine:
                                     socket.SOCK_RAW,
                                     socket.ntohs(constants.ETH_P_ALL))
 
-        # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
-        # self.socket.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
-
         if self.interface != SnifferEngine.NET_INTERFACE_ANY:
             # Attach to network interface
             self.socket.bind((self.interface, 0))
-
-        # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
     def __create_file_handle(self):
         """Open the requested file in write-only mode."""
@@ -60,6 +56,14 @@ class SnifferEngine:
     @total_packet_count.setter
     def total_packet_count(self, value) -> None:
         self._packet_count = value
+
+    @property
+    def filtered_packets(self):
+        return self._filtered_packets
+
+    @filtered_packets.setter
+    def filtered_packets(self, value):
+        self._filtered_packets = value
 
     @property
     def http_packet_count(self) -> int:

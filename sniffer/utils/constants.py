@@ -16,3 +16,6 @@ ROOT_EUID = 0
 
 # A constant number symbolizing infinity
 INFINITY = -0xdeadbeef
+
+# The default filter in case no one is passed as argument
+DEFAULT_FILTER = '[b purple]<no filter>[/b purple]'
