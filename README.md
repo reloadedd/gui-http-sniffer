@@ -24,12 +24,12 @@
 
 ```
 
-HTTP Packet Sniffer which can be accessed using a ~~GUI~~ (more like **TUI**).
-_GUI HTTP Sniffer_ i.e. **GHS**, is a layer-7 sniffer (it can also sniff lower 
-layers, starting with layer 3), targeting unencrypted HTTP traffic 
-(it can also be extended to sniff a myriad of other protocols, but we are 
-mainly interested in HTTP) and is capable of reading and analyzing that 
-traffic.    
+<p align="center">
+<i>GUI HTTP Sniffer</i> i.e. <b>GHS</b>, is a layer-7 sniffer, targeting
+unencrypted HTTP traffic and is capable of reading and analyzing
+that traffic. It also supports, among others, basic traffic filtering and 
+sniffing specific network interfaces.
+</p>
 
 ## Building Documentation
 Go to `docs/` directory and run `make html`. A new directory called `build/`
@@ -51,7 +51,9 @@ associated branch: `release/<version>`
 - RFC 791 - [IP Header Format](https://datatracker.ietf.org/doc/html/rfc791#section-3.1)
 - RFC 793 - [TCP Header Format](https://datatracker.ietf.org/doc/html/rfc793#section-3.1)
 - Python [struct](https://docs.python.org/3/library/struct.html) module
-- Python [socket](https://docs.python.org/3/library/socket.html) module 
+- Python [socket](https://docs.python.org/3/library/socket.html) module
+- rich module's [Read The Docs](https://rich.readthedocs.io/en/stable/)
+- rich module's [Github Page](https://github.com/willmcgugan/rich)
 - What is the difference between recv and recvfrom? [Let's find out](https://forums.codeguru.com/showthread.php?218423-What-is-the-difference-between-recv-and-recvfrom)
 - Value for the protocol argument in `socket()` call: [htons(0x800)](https://stackoverflow.com/a/46224239)
 - Linux cooked-mode capture: [Wireshark docs](https://wiki.wireshark.org/SLL)

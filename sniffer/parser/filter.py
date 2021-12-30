@@ -1,19 +1,36 @@
-from ..utils import constants
-from rich.text import Text
 from ipaddress import IPv4Address
+
+from ..utils import constants
 
 
 class Filter:
-    """Class that provides filtering for network packets."""
-    def __init__(self, analyzer: "PacketAnalyzer", _filter: str, layout):
+    """Class that provides filtering for network packets.
+
+    Attributes
+    ----------
+    analyzer : PacketAnalyzer
+        A parsable format that wraps a packet.
+    filter : str
+        The filter to be applied.
+    """
+    def __init__(self, analyzer: "PacketAnalyzer", _filter: str):
         self.analyzer = analyzer
         self.filter = _filter
-        self.layout = layout
 
     def _apply_ip_filter(self, _filter: str) -> bool:
-        """Apply filters at layer 3."""
+        """Apply filters at layer 3.
+
+        Parameters
+        ----------
+        _filter : str
+            The filter to be applied.
+
+        Returns
+        -------
+        bool
+            Whether or not the filter passed the filters.
+        """
         components = tuple(comp.strip() for comp in _filter.split('='))
-        # self.layout.update(Text(f'IP filter -> {components}\n{self.analyzer.source_ip == IPv4Address(components[1])}'))
 
         match components[0]:
             case 'src':
@@ -24,9 +41,19 @@ class Filter:
                 return False
 
     def _apply_http_filter(self, _filter: str) -> bool:
-        """Apply filters at layer 7."""
+        """Apply filters at layer 7.
+
+        Parameters
+        ----------
+        _filter : str
+            The filter to be applied.
+
+        Returns
+        -------
+        bool
+            Whether or not the filter passed the filters.
+        """
         components = tuple(comp.strip() for comp in _filter.split('='))
-        # self.layout.update(Text(f'HTTP filter -> {components}'))
 
         match components[0]:
             case 'method':

@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add missing docstrings
+
+### Changed
+- Put the text in the side panel into 2 separate panels
+- Fixed incomplete docstrings
+
 ## [0.5.1] - 2021-12-30
 ### Added
 - Implement `-f/--filter` option with the following filters:
