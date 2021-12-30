@@ -34,7 +34,7 @@ def create_parser():
         help='[blue]Filter expression to be applied when sniffing traffic.'
              '[/blue]',
         type=str,
-        default='[b magenta]<no filters>[/b magenta]',
+        default=constants.DEFAULT_FILTER,
         dest='filter'
     )
     optional_args.add_argument(

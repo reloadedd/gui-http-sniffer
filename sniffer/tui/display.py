@@ -3,6 +3,7 @@ import argparse
 import netifaces
 from time import sleep
 from datetime import datetime
+
 from rich.text import Text
 from rich.live import Live
 from rich.tree import Tree
@@ -12,6 +13,7 @@ from rich.layout import Layout
 from rich.columns import Columns
 
 from ..utils import constants
+from ..parser.filter import Filter
 from ..parser.textutils import console
 from ..__version__ import __version__
 from ..network.engine import SnifferEngine
@@ -80,16 +82,25 @@ class Footer:
 
 
 class SidePanel:
-    def __init__(self, sniffer):
+    def __init__(self, sniffer: SnifferEngine, _filter: str):
         self.sniffer = sniffer
+        self.filter = _filter
 
     def __rich__(self):
         text = f"""\
 ▶ Total Packet Count\t[b yellow]{self.sniffer.total_packet_count}[/b yellow]
 ▶ HTTP Packet Count\t[b yellow]{self.sniffer.http_packet_count}[/b yellow]
+▶ Filtered HTTP Packets\t[b yellow]{self.sniffer.filtered_packets}[/b yellow]
 """
 
-        return Panel(text,
+        columns = Columns(
+            [
+                text,
+                f'▶ Filter\t[b purple]{self.filter}[/b purple]',
+            ], expand=True
+        )
+
+        return Panel(columns,
                      title="[red]Statistics[/red]",
                      title_align="center",
                      border_style='bold red',
@@ -240,14 +251,14 @@ def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     layout['main'].split_row(Layout(name='body', ratio=3), Layout(name='side'))
     layout['body'].update(
         Align.center(
-            Text('Sniffing the air for unencrypted HTTP packets...',
+            Text(f'Sniffing the air for unencrypted HTTP packets...',
                  justify='center', style='dim red'),
             vertical="middle"
         )
     )
 
     layout['header'].update(Header())
-    layout['side'].update(SidePanel(sniffer))
+    layout['side'].update(SidePanel(sniffer, args.filter))
     layout['footer'].update(Footer(args.interface))
 
     return layout, panel
@@ -308,6 +319,13 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
             packets = []
 
             async for analyzer in sniffer.sniff(args.count):
+                # Filter HTTP packets based on the filter provided
+                if not (lambda: Filter(analyzer, args.filter, layout['body']))():
+                    sniffer.filtered_packets += 1
+
+                    live.refresh()
+                    continue
+
                 # 3 is footer + 1 is header + 2 for the borders (top & bottom)
                 max_height = console.height - 6
 

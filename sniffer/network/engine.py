@@ -17,6 +17,7 @@ class SnifferEngine:
         self.interface = interface
         self.total_packet_count = 0
         self.http_packet_count = 0
+        self.filtered_packets = 0
         self.filename = filename
         self.file_handle = self.__create_file_handle()
 
@@ -55,6 +56,14 @@ class SnifferEngine:
     @total_packet_count.setter
     def total_packet_count(self, value) -> None:
         self._packet_count = value
+
+    @property
+    def filtered_packets(self):
+        return self._filtered_packets
+
+    @filtered_packets.setter
+    def filtered_packets(self, value):
+        self._filtered_packets = value
 
     @property
     def http_packet_count(self) -> int:
