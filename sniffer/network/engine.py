@@ -24,14 +24,9 @@ class SnifferEngine:
                                     socket.SOCK_RAW,
                                     socket.ntohs(constants.ETH_P_ALL))
 
-        # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
-        # self.socket.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
-
         if self.interface != SnifferEngine.NET_INTERFACE_ANY:
             # Attach to network interface
             self.socket.bind((self.interface, 0))
-
-        # self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
     def __create_file_handle(self):
         """Open the requested file in write-only mode."""
