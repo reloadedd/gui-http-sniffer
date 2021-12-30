@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Put the text in the side panel into 2 separate panels
+
+
 ## [0.5.1] - 2021-12-30
 ### Added
 - Implement `-f/--filter` option with the following filters:

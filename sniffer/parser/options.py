@@ -1,5 +1,6 @@
 import netifaces
 from rich.table import Table
+
 from .textutils import console
 
 

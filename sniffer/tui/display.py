@@ -95,8 +95,10 @@ class SidePanel:
 
         columns = Columns(
             [
-                Panel(text, expand=True),
-                Panel(f'▶ Filter\t[b purple]{self.filter}[/b purple]', expand=True),
+                Panel(text,
+                      expand=True),
+                Panel(f'▶ Filter\t[b purple]{self.filter}[/b purple]',
+                      expand=True),
             ], expand=True
         )
 
@@ -321,7 +323,7 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine):
 
             async for analyzer in sniffer.sniff(args.count):
                 # Filter HTTP packets based on the filter provided
-                if not (lambda: Filter(analyzer, args.filter, layout['body']))():
+                if not (lambda: Filter(analyzer, args.filter))():
                     sniffer.filtered_packets += 1
 
                     live.refresh()

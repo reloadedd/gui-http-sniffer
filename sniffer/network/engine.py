@@ -1,5 +1,6 @@
 import socket
 import typing
+
 from ..utils import constants
 from .analyzer import PacketAnalyzer
 from ..utils.decorators import require_root

@@ -1,6 +1,7 @@
 import re
 import typing
 from urllib.parse import unquote
+
 from ..parser.textutils import console
 from .layers import Layer3, Layer4, Layer7
 from ..exceptions.network import UninterestingPacketException

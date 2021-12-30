@@ -1,7 +1,7 @@
 import struct
 import ipaddress
-from ..exceptions.network import UnsupportedVersionException, \
-    UninterestingPacketException
+
+from ..exceptions.network import UnsupportedVersionException
 
 
 class Layer3:

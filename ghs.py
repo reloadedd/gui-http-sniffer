@@ -26,7 +26,7 @@ The package can be called in 3 ways:
 import sniffer
 
 
-def main():
+def main() -> None:
     """Main driver of the program."""
     sniffer.main()
 

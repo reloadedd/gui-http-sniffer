@@ -1,14 +1,13 @@
 import typing
 from rich.console import Console
 
-
-from .. import __version__
+from ..__version__ import __version__
 from ..utils.funcutils import get_commit_hash
 
 # Global object which will be used throughout the whole package
 console = Console()
 
-version = f'[bold cyan]v{__version__.__version__}[/bold cyan]'
+version = f'[bold cyan]v{__version__}[/bold cyan]'
 commit_hash = f'[bold cyan]{get_commit_hash()}[/bold cyan]'
 
 BANNER = f"""\
