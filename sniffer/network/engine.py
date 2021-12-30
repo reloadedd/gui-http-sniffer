@@ -15,14 +15,8 @@ class SnifferEngine:
     ----------
     interface : str
         The name of the interface to be used for sniffing packets.
-    total_packet_count : int
-        The total number of packets sniffed.
-    http_packet_count : int
-        The number of HTTP packets sniffed.
     filename : str, optional
         The name of the file to be used for writing the output.
-    file_handle : typing.TextIO
-        The handle to the opened file.
     socket : socket.socket
         The socket used for sniffing packets.
     """
