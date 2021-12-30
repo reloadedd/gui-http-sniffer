@@ -150,7 +150,7 @@ class Body:
             if not analyzer.http_body:
                 body.add('[b purple]<empty>[/b purple]')
             else:
-                body.add(f'{analyzer.http_body}')
+                body.add(Text(f'{analyzer.http_body}'))
 
             packet_list.append(Panel(tree,
                                      expand=True,
