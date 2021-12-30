@@ -31,7 +31,7 @@ class Filter:
         match components[0]:
             case 'method':
                 return self.analyzer.http_verb is not None and \
-                       self.analyzer.http_verb == components[1]
+                       self.analyzer.http_verb == components[1].upper()
             case 'type':
                 if components[1] == 'request':
                     return self.analyzer.http_verb is not None
