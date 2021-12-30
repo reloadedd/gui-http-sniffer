@@ -2,6 +2,7 @@ import os
 import platform
 from functools import wraps
 from collections.abc import Callable
+
 from .constants import ROOT_EUID
 from .funcutils import handle_error
 

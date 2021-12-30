@@ -1,8 +1,9 @@
+import typing
 import argparse
 import sys as _sys
 from rich import print as rich_print
+
 from ..utils.constants import *
-import typing
 
 
 class ColoredArgumentParser(argparse.ArgumentParser):
