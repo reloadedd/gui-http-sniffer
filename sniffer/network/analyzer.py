@@ -70,7 +70,7 @@ class PacketAnalyzer:
         return 'Unknown'
 
     @property
-    def status_code(self) -> str | None:
+    def status_code(self) -> typing.Any:
         end = self.content.find(b'\r\n')
         start = self.content.find(
             self.http_version.encode('utf-8')
@@ -82,7 +82,7 @@ class PacketAnalyzer:
         return self.content[start:end].decode('utf8')
 
     @property
-    def http_verb(self) -> str | None:
+    def http_verb(self) -> typing.Any:
         for method in PacketAnalyzer.HTTP_METHODS:
             if self.content.startswith(method.encode('utf-8')):
                 return method
@@ -100,7 +100,7 @@ class PacketAnalyzer:
 
     @property
     def http_headers(self) -> \
-            typing.Generator[tuple[str | bytes, str | bytes], None, None]:
+            typing.Generator[tuple[typing.Any, typing.Any], None, None]:
         for header in self.content.split(b'\r\n')[1:]:
             if not header:
                 break
