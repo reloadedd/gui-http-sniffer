@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [0.5.1] - 2021-12-30
+### Added
+- Implement `-f/--filter` option with the following filters:
+  - `ip.src = <ip>`: Matches the source IP
+  - `ip.dst = <ip>`: Matches the destination IP
+  - `http.method = <method>`: Matches only the HTTP requests with the
+specified method (GET, POST etc.)
+  - `http.type = <type>`: Matches only the specified types of packets 
+(`request` or `response`)
+
 ### Changed
 - Replace or'ed types, i.e. `str | None`, with `typing.Any` because they
 break compatibility with Python < 3.10
