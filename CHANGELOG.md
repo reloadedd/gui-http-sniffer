@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Replace or'ed types, i.e. `str | None`, with `typing.Any` because they
 break compatibility with Python < 3.10
+- Sniffing won't be available on Windows because of technical complications
+(sorry Windows users)
 
 ## [0.5.0] - 2021-12-30
 ### Added
