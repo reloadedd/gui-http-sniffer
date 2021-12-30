@@ -95,8 +95,8 @@ class SidePanel:
 
         columns = Columns(
             [
-                text,
-                f'▶ Filter\t[b purple]{self.filter}[/b purple]',
+                Panel(text, expand=True),
+                Panel(f'▶ Filter\t[b purple]{self.filter}[/b purple]', expand=True),
             ], expand=True
         )
 
@@ -104,7 +104,8 @@ class SidePanel:
                      title="[red]Statistics[/red]",
                      title_align="center",
                      border_style='bold red',
-                     style="cyan")
+                     style="cyan",
+                     expand=True)
 
 
 class Body:
