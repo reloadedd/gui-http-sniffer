@@ -14,8 +14,6 @@ class PacketAnalyzer:
     ----------
     packet_bytes : bytes
         The content of the packet, represented as bytes.
-    packet_count : int
-        The number of the current packet.
     """
     HTTP_METHODS = [
         'GET',

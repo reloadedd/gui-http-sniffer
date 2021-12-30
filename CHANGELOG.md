@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.3] - 2021-12-31
+### Added
+- Add a new reference in `README.md`
+
+### Changed
+- Update Sphinx configuration files to reflect the documentation up-to-date
+
 ## [0.5.2] - 2021-12-31
 ### Added
 - Add missing docstrings
@@ -132,7 +139,7 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.5.3...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
@@ -144,3 +151,4 @@ the version number and Git commit
 [0.5.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.0
 [0.5.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.1
 [0.5.2]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.2
+[0.5.3]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.3
