@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.5.3] - 2021-12-31
 ### Added
 - Add a new reference in `README.md`
+- Add `-lf/--list-filters` option to display available filters
 
 ### Changed
 - Update Sphinx configuration files to reflect the documentation up-to-date
+- `-l/--list-interfaces` option became `-li/--list-interfaces`
 
 ## [0.5.2] - 2021-12-31
 ### Added
