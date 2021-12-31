@@ -119,7 +119,8 @@ class SnifferEngine:
             The content of the sniffed packet, wrapped in a parsable format.
         """
         async for packet in self.__sniff():
-            if count != constants.INFINITY and self.http_packet_count >= count:
+            if count != constants.INFINITY and \
+                    self.http_packet_count - self.filtered_packets >= count:
                 break
 
             self.total_packet_count += 1
