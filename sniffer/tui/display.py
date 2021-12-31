@@ -1,3 +1,4 @@
+import sys
 import asyncio
 import argparse
 import netifaces
@@ -20,6 +21,7 @@ from ..network.engine import SnifferEngine
 from ..utils.funcutils import get_commit_hash
 from ..network.analyzer import PacketAnalyzer
 from ..parser.textutils import write_output_to_file
+from ..exceptions.parser import InvalidFilterException
 
 
 # Credits for the clock: rich module examples
@@ -45,15 +47,19 @@ class Footer:
         The number of packets to be sniffed by the engine.
     seconds : int, optional
         The number of seconds to wait before quitting.
+    message : str, optional
+        The error message, in case of error.
     """
     def __init__(self, interface: str = 'any',
                  stage: str = 'beginning',
                  count: int = constants.INFINITY,
-                 seconds: int = constants.INFINITY):
+                 seconds: int = constants.INFINITY,
+                 message: str = ''):
         self.interface = interface
         self.stage = stage
         self.count = count
         self.seconds = seconds
+        self.message = message
 
     def __rich_footer_begin(self):
         ip_address = 'any'
@@ -86,11 +92,27 @@ class Footer:
                      border_style='bold red',
                      style="cyan")
 
+    def __rich_footer_error(self):
+        return Panel(Align.center(f'{self.message}. Exiting in [b cyan]'
+                                  f'{self.seconds}[/b cyan] seconds...'),
+                     title="[red]Status[/red]",
+                     title_align="center",
+                     border_style='bold red',
+                     style="cyan")
+
     def __rich__(self):
         if self.stage == 'beginning':
             return self.__rich_footer_begin()
-        else:
+        elif self.stage == 'end':
             return self.__rich_footer_end()
+        elif self.stage == 'error':
+            return self.__rich_footer_error()
+
+        return Panel(Align.center('Wrong stage name'),
+                     title="[red]Status[/red]",
+                     title_align="center",
+                     border_style='bold red',
+                     style="cyan")
 
 
 class SidePanel:
@@ -259,7 +281,7 @@ def intro(banner: Banner, live: Live) -> None:
 
 
 def outro(layout: Layout, live: Live, count: int) -> None:
-    """Create cinematic outro effect.
+    """Update the status bar upon exit.
     
     Parameters
     ----------
@@ -274,6 +296,26 @@ def outro(layout: Layout, live: Live, count: int) -> None:
         layout['footer'].update(Footer(stage='end',
                                        count=count,
                                        seconds=seconds))
+        live.refresh()
+        sleep(1)
+
+
+def error(layout: Layout, live: Live, message: str) -> None:
+    """Update status bar upon exit.
+    
+    Parameters
+    ----------
+    layout : Layout
+        A layout object which represent a rectangular area in the application
+    live : Live
+        The context manager object used to create the whole 'graphics'
+    message: str
+        The error message.
+    """
+    for seconds in range(5, 0, -1):
+        layout['footer'].update(Footer(stage='error',
+                                       seconds=seconds,
+                                       message=message))
         live.refresh()
         sleep(1)
 
@@ -420,5 +462,8 @@ async def render(args: argparse.Namespace, sniffer: SnifferEngine) -> None:
             outro(layout['footer'], live, args.count)
         except KeyboardInterrupt:
             pass
+        except InvalidFilterException:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            error(layout['footer'], live, f'InvalidFilterException: {exc_obj}')
         finally:
             sniffer.close_handle()
