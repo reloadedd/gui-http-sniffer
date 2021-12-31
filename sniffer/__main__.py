@@ -11,9 +11,9 @@ from .utils import constants
 from .tui.display import render
 from .__version__ import __version__
 from .network.engine import SnifferEngine
-from .parser.options import list_interfaces
 from .parser.textutils import BANNER, EPILOG
 from .parser.custom import ColoredArgumentParser
+from .parser.options import list_interfaces, list_filters
 
 
 def create_parser() -> argparse.Namespace:
@@ -68,10 +68,17 @@ def create_parser() -> argparse.Namespace:
         dest='file'
     )
     optional_args.add_argument(
-        '-l',
+        '-li',
         '--list-interfaces',
         help='[blue]List all network interfaces present in the system[/blue]',
         dest='list_interfaces',
+        action='store_true'
+    )
+    optional_args.add_argument(
+        '-lf',
+        '--list-filters',
+        help='[blue]List all possible filters for sniffed packets[/blue]',
+        dest='list_filters',
         action='store_true'
     )
     optional_args.add_argument(
@@ -102,6 +109,10 @@ def create_parser() -> argparse.Namespace:
     parsed = parser.parse_args()
     if parsed.list_interfaces:
         list_interfaces()
+        exit(constants.EXIT_SUCCESS)
+
+    if parsed.list_filters:
+        list_filters()
         exit(constants.EXIT_SUCCESS)
 
     return parsed

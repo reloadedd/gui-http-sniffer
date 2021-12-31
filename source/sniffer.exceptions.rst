@@ -12,6 +12,14 @@ sniffer.exceptions.network module
    :undoc-members:
    :show-inheritance:
 
+sniffer.exceptions.parser module
+--------------------------------
+
+.. automodule:: sniffer.exceptions.parser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
