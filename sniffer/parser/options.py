@@ -26,3 +26,32 @@ def list_interfaces() -> None:
         )
 
     console.print(table)
+
+
+def list_filters() -> None:
+    """List all possible filters to be applied for sniffed packets."""
+    table = Table(title='Filters')
+
+    table.add_column("Name", justify='left', style='cyan')
+    table.add_column("Meaning", justify='center', style='magenta')
+    table.add_column("Allowed Values", justify='left', style='red')
+
+    # ip.src
+    table.add_row('ip.src = <ip>',
+                  'Allow only packets with the specified source IP address',
+                  'any IPv4 address')
+    # ip.dst
+    table.add_row('ip.dst = <ip>',
+                  'Allow only packets with the specified destination IP '
+                  'address',
+                  'any IPv4 address')
+    # http.method
+    table.add_row('http.method = <method>',
+                  'Allow only HTTP requests using the specified method',
+                  'GET, POST etc.')
+    # http.type
+    table.add_row('http.type = <type>',
+                  'Allow only HTTP packets of that type',
+                  'request, response')
+
+    console.print(table)

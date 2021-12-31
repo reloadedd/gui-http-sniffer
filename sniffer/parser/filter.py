@@ -1,6 +1,7 @@
 from ipaddress import IPv4Address
 
 from ..utils import constants
+from ..exceptions.parser import InvalidFilterException
 
 
 class Filter:
@@ -17,7 +18,7 @@ class Filter:
         self.analyzer = analyzer
         self.filter = _filter
 
-    def _apply_ip_filter(self, _filter: str) -> bool:
+    def apply_ip_filter(self, _filter: str) -> bool:
         """Apply filters at layer 3.
 
         Parameters
@@ -29,6 +30,11 @@ class Filter:
         -------
         bool
             Whether or not the filter passed the filters.
+
+        Raises
+        ------
+        InvalidFilterException
+            If the filter passed is not valid.
         """
         components = tuple(comp.strip() for comp in _filter.split('='))
 
@@ -38,9 +44,9 @@ class Filter:
             case 'dst':
                 return self.analyzer.dest_ip == IPv4Address(components[1])
             case _:
-                return False
+                raise InvalidFilterException('Invalid filter received')
 
-    def _apply_http_filter(self, _filter: str) -> bool:
+    def apply_http_filter(self, _filter: str) -> bool:
         """Apply filters at layer 7.
 
         Parameters
@@ -52,6 +58,11 @@ class Filter:
         -------
         bool
             Whether or not the filter passed the filters.
+
+        Raises
+        ------
+        InvalidFilterException
+            If the filter passed is not valid.
         """
         components = tuple(comp.strip() for comp in _filter.split('='))
 
@@ -64,8 +75,10 @@ class Filter:
                     return self.analyzer.http_verb is not None
                 elif components[1] == 'response':
                     return self.analyzer.http_verb is None
+                else:
+                    raise InvalidFilterException('Invalid filter received')
             case _:
-                return False
+                raise InvalidFilterException('Invalid filter received')
 
     def __bool__(self):
         if self.filter == constants.DEFAULT_FILTER:
@@ -73,10 +86,10 @@ class Filter:
 
         match self.filter[:self.filter.index('.')]:
             case 'ip':
-                return self._apply_ip_filter(
+                return self.apply_ip_filter(
                     self.filter[self.filter.index('.') + 1:]
                 )
             case 'http':
-                return self._apply_http_filter(
+                return self.apply_http_filter(
                     self.filter[self.filter.index('.') + 1:]
                 )
