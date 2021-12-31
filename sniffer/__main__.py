@@ -6,6 +6,7 @@
 
 import asyncio
 import argparse
+from rich.traceback import install
 
 from .utils import constants
 from .tui.display import render
@@ -14,6 +15,9 @@ from .network.engine import SnifferEngine
 from .parser.textutils import BANNER, EPILOG
 from .parser.custom import ColoredArgumentParser
 from .parser.options import list_interfaces, list_filters
+
+# Install custom traceback handler
+install(show_locals=False)
 
 
 def create_parser() -> argparse.Namespace:
