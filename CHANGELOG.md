@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.4] - 2021-12-31
+### Added
+- Add version constraint for Python 3.10 (the use of newer `match - case`
+statements break compatibility with lower versions)
+- Install custom traceback handler, which is a bit nicer than the standard one
+and also has colors 🌠 (let's hope I handled all exception cases though and
+we won't need it)
+- Display error in case of `InvalidFilterException` in the status bar adn then
+exit
+- Add cool badges in `README.md` file
+
+### Fixed
+- Fix `RuntimeWarning` when using the package with `python -m sniffer`
+
+
 ## [0.5.3] - 2021-12-31
 ### Added
 - Add a new reference in `README.md`
@@ -141,7 +156,7 @@ which re-arranges the layout and adds coloring 🌠
 the version number and Git commit
 
 
-[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.5.3...HEAD
+[Unreleased]: https://github.com/reloadedd/gui-http-sniffer/compare/v0.5.4...HEAD
 [0.1.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.0
 [0.1.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.1.1
 [0.2.0]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.2.0
@@ -154,3 +169,4 @@ the version number and Git commit
 [0.5.1]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.1
 [0.5.2]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.2
 [0.5.3]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.3
+[0.5.4]: https://github.com/reloadedd/gui-http-sniffer/releases/tag/v0.5.4
