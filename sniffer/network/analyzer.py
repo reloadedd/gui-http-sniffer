@@ -79,7 +79,7 @@ class PacketAnalyzer:
     @property
     def http_version(self) -> str:
         """Get the HTTP version."""
-        regex = re.compile(br'HTTP\/\d\.\d')
+        regex = re.compile(br'HTTP/\d\.\d')
 
         if match_obj := regex.search(self.content):
             return match_obj.group().decode('utf8')
