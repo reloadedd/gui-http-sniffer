@@ -9,6 +9,7 @@ from rich.text import Text
 from rich.live import Live
 from rich.tree import Tree
 from rich.align import Align
+from rich.align import VerticalCenter
 from rich.panel import Panel
 from rich.layout import Layout
 from rich.columns import Columns
@@ -173,7 +174,7 @@ class Body:
         for analyzer in self.packets:
             formatted_packet = [
                 f'▷ [b magenta]#{analyzer.packet_count}[/b magenta]\t'
-                f'[b green]{analyzer.source_ip}[/b green] ⟶ '
+                f'[b green]{analyzer.source_ip}[/b green] ➞ '
                 f'[b red]{analyzer.dest_ip}[/b red] | '
                 f'[b green]HTTP Version:[/b green]\t'
                 f'[b]{analyzer.http_version}[/b]'
@@ -249,8 +250,8 @@ class Banner:
         panel = Panel(
             Align.center(
                 Text(self.banner_array[self.index].replace('\\n', '\n'),
-                     justify='left', style='bold red'), vertical='middle'),
-            border_style='bold dark_cyan'
+                     justify='left', style='bold red')),
+            height=console.height, border_style='bold dark_cyan'
         )
         self.index += 1
 
@@ -258,10 +259,11 @@ class Banner:
 
     def __rich__(self):
         # Return a panel created using the first frame
-        return Panel(Align.center(
-            Text(self.banner_array[0].replace('\\n', '\n'), justify='left'),
-            vertical='middle'
-        ), border_style='dim dark_cyan')
+        return Panel(
+            Align.center(
+                Text(self.banner_array[0].replace('\\n', '\n'),
+                     justify='left', style='bold red')),
+            height=console.height, border_style='bold dark_cyan')
 
 
 def intro(banner: Banner, live: Live) -> None:
@@ -342,7 +344,7 @@ def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     The Panel is used for drawing the borders of the application.
     """
     layout = Layout()
-    panel = Panel(layout, border_style='bold dark_cyan')
+    panel = Panel(layout, border_style='bold dark_cyan', height=console.height)
 
     layout.split(
         Layout(name='header', size=1),
