@@ -9,6 +9,7 @@ from rich.text import Text
 from rich.live import Live
 from rich.tree import Tree
 from rich.align import Align
+from rich.align import VerticalCenter
 from rich.panel import Panel
 from rich.layout import Layout
 from rich.columns import Columns
@@ -249,8 +250,8 @@ class Banner:
         panel = Panel(
             Align.center(
                 Text(self.banner_array[self.index].replace('\\n', '\n'),
-                     justify='left', style='bold red'), vertical='middle'),
-            border_style='bold dark_cyan'
+                     justify='left', style='bold red')),
+            height=console.height, border_style='bold dark_cyan'
         )
         self.index += 1
 
@@ -258,10 +259,11 @@ class Banner:
 
     def __rich__(self):
         # Return a panel created using the first frame
-        return Panel(Align.center(
-            Text(self.banner_array[0].replace('\\n', '\n'), justify='left'),
-            vertical='middle'
-        ), border_style='dim dark_cyan')
+        return Panel(
+            Align.center(
+                Text(self.banner_array[0].replace('\\n', '\n'),
+                     justify='left', style='bold red')),
+            height=console.height, border_style='bold dark_cyan')
 
 
 def intro(banner: Banner, live: Live) -> None:
