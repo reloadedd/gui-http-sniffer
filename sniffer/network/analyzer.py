@@ -151,7 +151,10 @@ class PacketAnalyzer:
     @property
     def http_body(self) -> bytes:
         """Get the body of the HTTP packet."""
-        return self.content.split(b'\r\n\r\n')[1]
+        try:
+            return self.content.split(b'\r\n\r\n')[1]
+        except IndexError:
+            return b''
 
     @property
     def packet_height(self) -> int:

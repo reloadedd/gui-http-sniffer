@@ -173,7 +173,7 @@ class Body:
         for analyzer in self.packets:
             formatted_packet = [
                 f'▷ [b magenta]#{analyzer.packet_count}[/b magenta]\t'
-                f'[b green]{analyzer.source_ip}[/b green] ⟶ '
+                f'[b green]{analyzer.source_ip}[/b green] ➞ '
                 f'[b red]{analyzer.dest_ip}[/b red] | '
                 f'[b green]HTTP Version:[/b green]\t'
                 f'[b]{analyzer.http_version}[/b]'
@@ -342,7 +342,7 @@ def make_layouts(args: argparse.Namespace, sniffer: SnifferEngine):
     The Panel is used for drawing the borders of the application.
     """
     layout = Layout()
-    panel = Panel(layout, border_style='bold dark_cyan')
+    panel = Panel(layout, border_style='bold dark_cyan', height=console.height)
 
     layout.split(
         Layout(name='header', size=1),
