@@ -162,8 +162,10 @@ class PacketAnalyzer:
         headers_len = len([_ for _ in self.http_headers])
         # Some crazy math: 3/4 is the ratio of the 'body' layout
         # 12 characters are taken by the tree's branch
-        # 1 character in case the text is less than one line
-        body_len = len(self.http_body) // (console.width * 3 // 4 - 12) + 1
+        # 1 character in case the text is < one line, add another one if the
+        # body is too short (<100 bytes).
+        body_len = len(self.http_body) // (console.width * 3 // 4 - 12) + 1 + \
+                   (1 if len(self.http_body) < 100 else 0)
 
         path_len = 0
         if self.request_path:
